@@ -134,7 +134,7 @@ func TestNormalizeBashSafeRedirectsForMatch(t *testing.T) {
 }
 
 func TestNormalizeBashSafeRedirectsPreservesControlSyntax(t *testing.T) {
-	got, ok := normalizeBashSafeRedirectsForMatch("git log >/dev/null\nrm -rf /tmp/x")
+	got, ok := normalizeBashSafeRedirectsForMatch("git log >/dev/null\nrm -rf /data/data/com.termux/files/usr/tmp/x")
 	if !ok {
 		t.Fatal("safe redirect should normalize while preserving the newline")
 	}

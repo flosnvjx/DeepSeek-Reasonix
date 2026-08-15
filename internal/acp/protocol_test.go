@@ -141,7 +141,7 @@ func TestMcpSpecsNil(t *testing.T) {
 
 func TestMcpSpecsConversion(t *testing.T) {
 	in := []MCPServerSpec{
-		{Name: "search", Command: "search-mcp", Args: []string{"--stdio"}, Env: MCPEnv{"HOME": "/tmp"}},
+		{Name: "search", Command: "search-mcp", Args: []string{"--stdio"}, Env: MCPEnv{"HOME": "/data/data/com.termux/files/usr/tmp"}},
 		{Name: "remote", Type: "http", URL: "https://mcp.example.test", Headers: MCPHeaders{"Authorization": "Bearer token"}},
 	}
 	got, err := mcpSpecs(in, "/workspace")
@@ -157,7 +157,7 @@ func TestMcpSpecsConversion(t *testing.T) {
 	if got[0].Args[0] != "--stdio" {
 		t.Errorf("args = %v", got[0].Args)
 	}
-	if got[0].Env["HOME"] != "/tmp" {
+	if got[0].Env["HOME"] != "/data/data/com.termux/files/usr/tmp" {
 		t.Errorf("env = %v", got[0].Env)
 	}
 	if got[0].Dir != "/workspace" {
@@ -177,12 +177,12 @@ func TestMcpSpecsConversion(t *testing.T) {
 func TestMCPEnvAcceptsOfficialArrayShape(t *testing.T) {
 	var p SessionNewParams
 	raw := []byte(`{
-		"cwd":"/tmp",
+		"cwd":"/data/data/com.termux/files/usr/tmp",
 		"mcpServers":[{
 			"name":"fs",
 			"command":"mcp-fs",
 			"args":["--stdio"],
-			"env":[{"name":"HOME","value":"/tmp"},{"name":"EMPTY","value":""}]
+			"env":[{"name":"HOME","value":"/data/data/com.termux/files/usr/tmp"},{"name":"EMPTY","value":""}]
 		}]
 	}`)
 	if err := json.Unmarshal(raw, &p); err != nil {
@@ -192,7 +192,7 @@ func TestMCPEnvAcceptsOfficialArrayShape(t *testing.T) {
 	if err != nil {
 		t.Fatalf("mcpSpecs: %v", err)
 	}
-	if got[0].Env["HOME"] != "/tmp" || got[0].Env["EMPTY"] != "" {
+	if got[0].Env["HOME"] != "/data/data/com.termux/files/usr/tmp" || got[0].Env["EMPTY"] != "" {
 		t.Fatalf("env = %v, want HOME and EMPTY from official array", got[0].Env)
 	}
 }
@@ -200,7 +200,7 @@ func TestMCPEnvAcceptsOfficialArrayShape(t *testing.T) {
 func TestMCPHeadersAcceptsOfficialArrayShape(t *testing.T) {
 	var p SessionNewParams
 	raw := []byte(`{
-		"cwd":"/tmp",
+		"cwd":"/data/data/com.termux/files/usr/tmp",
 		"mcpServers":[{
 			"name":"remote",
 			"type":"http",
@@ -223,7 +223,7 @@ func TestMCPHeadersAcceptsOfficialArrayShape(t *testing.T) {
 func TestMCPHeadersAcceptsEmptyArray(t *testing.T) {
 	var p SessionNewParams
 	raw := []byte(`{
-		"cwd":"/tmp",
+		"cwd":"/data/data/com.termux/files/usr/tmp",
 		"mcpServers":[{
 			"name":"remote",
 			"type":"http",
@@ -242,7 +242,7 @@ func TestMCPHeadersAcceptsEmptyArray(t *testing.T) {
 func TestMCPHeadersAcceptsLegacyMap(t *testing.T) {
 	var p SessionNewParams
 	raw := []byte(`{
-		"cwd":"/tmp",
+		"cwd":"/data/data/com.termux/files/usr/tmp",
 		"mcpServers":[{
 			"name":"remote",
 			"type":"http",
@@ -259,15 +259,15 @@ func TestMCPHeadersAcceptsLegacyMap(t *testing.T) {
 }
 
 func TestMcpSpecsRejectsUnsupportedTransport(t *testing.T) {
-	got, err := mcpSpecs([]MCPServerSpec{{Name: "remote", Type: "sse", URL: "https://example.test/sse"}}, "/tmp")
+	got, err := mcpSpecs([]MCPServerSpec{{Name: "remote", Type: "sse", URL: "https://example.test/sse"}}, "/data/data/com.termux/files/usr/tmp")
 	if err != nil || len(got) != 1 || got[0].Type != "sse" {
 		t.Fatalf("mcpSpecs legacy SSE = %+v, %v", got, err)
 	}
-	_, err = mcpSpecs([]MCPServerSpec{{Name: "remote", Type: "websocket", URL: "https://example.test/ws"}}, "/tmp")
+	_, err = mcpSpecs([]MCPServerSpec{{Name: "remote", Type: "websocket", URL: "https://example.test/ws"}}, "/data/data/com.termux/files/usr/tmp")
 	if err == nil || !strings.Contains(err.Error(), "unsupported transport") {
 		t.Fatalf("mcpSpecs unsupported transport err = %v", err)
 	}
-	_, err = mcpSpecs([]MCPServerSpec{{Name: "remote", Type: "http"}}, "/tmp")
+	_, err = mcpSpecs([]MCPServerSpec{{Name: "remote", Type: "http"}}, "/data/data/com.termux/files/usr/tmp")
 	if err == nil || !strings.Contains(err.Error(), "url is required") {
 		t.Fatalf("mcpSpecs missing url err = %v", err)
 	}

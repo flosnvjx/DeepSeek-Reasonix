@@ -36,7 +36,7 @@ func TestStaticFields(t *testing.T) {
 		},
 		{
 			name:      "control operator is shell syntax",
-			command:   "git status && rm -rf /tmp/x",
+			command:   "git status && rm -rf /data/data/com.termux/files/usr/tmp/x",
 			malformed: true,
 		},
 		{
@@ -224,8 +224,8 @@ func TestSplitTopLevel(t *testing.T) {
 		},
 		{
 			name:      "semicolon chain",
-			command:   "cd /tmp; ls -la",
-			want:      []string{"cd /tmp", "ls -la"},
+			command:   "cd /data/data/com.termux/files/usr/tmp; ls -la",
+			want:      []string{"cd /data/data/com.termux/files/usr/tmp", "ls -la"},
 			wantSplit: true,
 			wantOK:    true,
 		},

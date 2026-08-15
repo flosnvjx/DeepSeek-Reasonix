@@ -61,7 +61,7 @@ func TestArgsEnableLongPathsOnlyOnWindows(t *testing.T) {
 	if args := argsFor("windows", `C:\Users\test\repo`, nil, "status"); !hasConfig(args, "core.longpaths=true") {
 		t.Fatalf("windows args = %v, want core.longpaths=true", args)
 	}
-	if args := argsFor("linux", "/tmp/repo", nil, "status"); hasConfig(args, "core.longpaths=true") {
+	if args := argsFor("linux", "/data/data/com.termux/files/usr/tmp/repo", nil, "status"); hasConfig(args, "core.longpaths=true") {
 		t.Fatalf("non-windows args = %v, must not override core.longpaths", args)
 	}
 }

@@ -1767,7 +1767,7 @@ func TestMouseRightClickPasteUsesCanonicalFoldedPastePath(t *testing.T) {
 }
 
 func TestMiddleClickUsesTmuxPasteBufferInsideTmux(t *testing.T) {
-	t.Setenv("TMUX", "/tmp/tmux-1000/default,1,0")
+	t.Setenv("TMUX", "/data/data/com.termux/files/usr/tmp/tmux-1000/default,1,0")
 	previousTmux := readTmuxPasteBuffer
 	previousPrimary := readPrimaryPasteSelection
 	t.Cleanup(func() {
@@ -1883,7 +1883,7 @@ func TestMiddleClickUsesPrimarySelectionOutsideTmux(t *testing.T) {
 }
 
 func TestMiddleClickTmuxReadFailureIsSilent(t *testing.T) {
-	t.Setenv("TMUX", "/tmp/tmux-1000/default,1,0")
+	t.Setenv("TMUX", "/data/data/com.termux/files/usr/tmp/tmux-1000/default,1,0")
 	previous := readTmuxPasteBuffer
 	t.Cleanup(func() { readTmuxPasteBuffer = previous })
 	readTmuxPasteBuffer = func() (string, error) { return "", errors.New("no buffers") }
@@ -3488,7 +3488,7 @@ func TestDynamicMCPFreshApprovalHidesRememberedChoices(t *testing.T) {
 }
 
 func TestDynamicBashApprovalChoicesUseExactLiteralRules(t *testing.T) {
-	const command = "git status $(touch /tmp/reasonix-dynamic-approval)"
+	const command = "git status $(touch /data/data/com.termux/files/usr/tmp/reasonix-dynamic-approval)"
 	approval := &event.Approval{Tool: "bash", Subject: command}
 	choices := approvalChoices(approval)
 	if len(choices) != 4 {

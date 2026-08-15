@@ -25,7 +25,7 @@ func TestLoadMCPJSON(t *testing.T) {
     },
     "filesystem": {
       "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-filesystem", "/tmp"],
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "/data/data/com.termux/files/usr/tmp"],
       "env": { "FOO": "bar" }
     }
   }
@@ -846,7 +846,7 @@ func TestLoadLegacyMCP(t *testing.T) {
     "uvx run anonymous-server"
   ],
   "mcpServers": { "github": { "command": "npx" } },
-  "mcpEnv": { "memory": { "MEMORY_PATH": "/tmp/mem" } },
+  "mcpEnv": { "memory": { "MEMORY_PATH": "/data/data/com.termux/files/usr/tmp/mem" } },
   "mcpDisabled": ["off"]
 }`
 	if err := os.WriteFile(path, []byte(doc), 0o644); err != nil {
@@ -857,7 +857,7 @@ func TestLoadLegacyMCP(t *testing.T) {
 	for _, e := range got {
 		byName[e.Name] = e
 	}
-	if m := byName["memory"]; m.Command != "npx" || m.Env["MEMORY_PATH"] != "/tmp/mem" {
+	if m := byName["memory"]; m.Command != "npx" || m.Env["MEMORY_PATH"] != "/data/data/com.termux/files/usr/tmp/mem" {
 		t.Errorf("legacy mcp string entry mapped wrong: %+v", m)
 	}
 	if r := byName["remote"]; r.Type != "sse" || r.URL != "https://x/sse" {

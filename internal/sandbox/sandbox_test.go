@@ -275,7 +275,7 @@ func TestCommandNonDarwin(t *testing.T) {
 	if runtime.GOOS == "darwin" {
 		t.Skip("testing non-darwin path")
 	}
-	spec := Spec{Mode: "enforce", WriteRoots: []string{"/tmp"}}
+	spec := Spec{Mode: "enforce", WriteRoots: []string{"/data/data/com.termux/files/usr/tmp"}}
 	cmd, wrapped := Command(spec, Shell{Kind: ShellBash, Path: "sh"}, "echo hi")
 	if Available() {
 		if !wrapped || cmd[0] == "sh" {

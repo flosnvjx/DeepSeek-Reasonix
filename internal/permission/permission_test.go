@@ -86,7 +86,7 @@ func TestMatchGlob(t *testing.T) {
 		pattern, name string
 		want          bool
 	}{
-		{"rm -rf*", "rm -rf /tmp/x", true}, // '*' crosses '/'
+		{"rm -rf*", "rm -rf /data/data/com.termux/files/usr/tmp/x", true}, // '*' crosses '/'
 		{"go test*", "go test ./...", true},
 		{"rm *", "rm *.log", true},
 		{"go test*", "go build", false},

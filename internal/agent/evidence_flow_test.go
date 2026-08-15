@@ -266,7 +266,7 @@ func TestDeliveryProfileBlocksMixedVerificationBeforeItBecomesMutation(t *testin
 	reg := evidenceRegistry()
 	prov := &scriptedProvider{name: "delivery", turns: [][]provider.Chunk{
 		{toolCallChunk("criteria", "todo_write", `{"todos":[{"content":"Check snake","status":"in_progress"}]}`), {Type: provider.ChunkDone}},
-		{toolCallChunk("mixed", "bash", `{"command":"python3 -c 'open(\"/tmp/snake_check.js\",\"w\").write(\"x\")' && node --check /tmp/snake_check.js"}`), {Type: provider.ChunkDone}},
+		{toolCallChunk("mixed", "bash", `{"command":"python3 -c 'open(\"/data/data/com.termux/files/usr/tmp/snake_check.js\",\"w\").write(\"x\")' && node --check /data/data/com.termux/files/usr/tmp/snake_check.js"}`), {Type: provider.ChunkDone}},
 		{toolCallChunk("safe", "bash", `{"command":"tail -n +2 snake.js | head -n 20 | node --check -"}`), {Type: provider.ChunkDone}},
 		{toolCallChunk("signoff", "complete_step", `{"step":"Check snake","result":"syntax valid","evidence":[{"kind":"verification","summary":"syntax valid","command":"tail -n +2 snake.js | head -n 20 | node --check -"}]}`), {Type: provider.ChunkDone}},
 		{{Type: provider.ChunkText, Text: "checked"}, {Type: provider.ChunkDone}},

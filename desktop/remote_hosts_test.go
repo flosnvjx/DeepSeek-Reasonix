@@ -369,7 +369,7 @@ func TestRemoteHostStoreValidatesOptionalSSHConfigPath(t *testing.T) {
 	entry, _ := NewRemoteHostEntry("host", "Host")
 	dir := t.TempDir()
 	unclean := dir + string(os.PathSeparator) + ".." + string(os.PathSeparator) + "unclean"
-	for _, invalid := range []string{"relative/config", unclean, "/tmp/config\nProxyCommand evil"} {
+	for _, invalid := range []string{"relative/config", unclean, "/data/data/com.termux/files/usr/tmp/config\nProxyCommand evil"} {
 		entry.SSHConfigPath = invalid
 		if err := store.Upsert(entry); err == nil {
 			t.Errorf("sshConfigPath %q unexpectedly accepted", invalid)

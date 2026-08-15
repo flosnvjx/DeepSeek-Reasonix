@@ -131,7 +131,7 @@ func TestAttachUsesInitializeWorkspaceWhenTargetIsUnbound(t *testing.T) {
 	if goruntime.GOOS == "darwin" {
 		// macOS Unix-domain sockets have a short path limit, while os.TempDir()
 		// normally points into a long per-user /var/folders path.
-		tempBase = "/tmp"
+		tempBase = "/data/data/com.termux/files/usr/tmp"
 	}
 	home, err := os.MkdirTemp(tempBase, "rx-attach-")
 	if err != nil {

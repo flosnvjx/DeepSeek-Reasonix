@@ -180,7 +180,7 @@ func TestExplicitBackgroundKeepaliveDetection(t *testing.T) {
 		{
 			name: "heredoc body ampersand and parens are not keepalive",
 			command: strings.Join([]string{
-				"cat > /tmp/test_redact.go <<'EOF'",
+				"cat > /data/data/com.termux/files/usr/tmp/test_redact.go <<'EOF'",
 				"func main() {",
 				"\tjson.Unmarshal(data, &v)",
 				"}",
@@ -191,7 +191,7 @@ func TestExplicitBackgroundKeepaliveDetection(t *testing.T) {
 		{
 			name: "heredoc body keepalive text is not keepalive",
 			command: strings.Join([]string{
-				"cat > /tmp/repro.txt <<'EOF'",
+				"cat > /data/data/com.termux/files/usr/tmp/repro.txt <<'EOF'",
 				"nohup sleep 60 >/dev/null 2>&1 &",
 				"EOF",
 			}, "\n"),

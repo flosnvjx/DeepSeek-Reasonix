@@ -137,7 +137,7 @@ func TestHistoryToolValidatesInputs(t *testing.T) {
 	}{
 		{"missing operation", `{}`},
 		{"unknown operation", `{"operation":"scan"}`},
-		{"around missing index", `{"operation":"around","session_path":"/tmp/session.jsonl"}`},
+		{"around missing index", `{"operation":"around","session_path":"/data/data/com.termux/files/usr/tmp/session.jsonl"}`},
 		{"bad json", `{"operation":`},
 	} {
 		t.Run(tc.name, func(t *testing.T) {

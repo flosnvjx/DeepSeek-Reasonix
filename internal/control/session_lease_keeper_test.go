@@ -139,9 +139,9 @@ func TestSessionLeaseKeeperReleaseRemovesLeaseInfo(t *testing.T) {
 func TestSessionInUseMessageNamesHolder(t *testing.T) {
 	acquired := time.Date(2026, 7, 6, 3, 4, 0, 0, time.UTC)
 	err := &agent.SessionLeaseError{
-		Path: "/tmp/x.jsonl",
+		Path: "/data/data/com.termux/files/usr/tmp/x.jsonl",
 		Info: &agent.SessionLeaseInfo{
-			SessionPath: "/tmp/x.jsonl",
+			SessionPath: "/data/data/com.termux/files/usr/tmp/x.jsonl",
 			WriterID:    "writer-nonce-should-not-appear",
 			PID:         12345,
 			Hostname:    "devbox",
@@ -161,14 +161,14 @@ func TestSessionInUseMessageNamesHolder(t *testing.T) {
 	if strings.Contains(msg, "writer-nonce-should-not-appear") {
 		t.Fatalf("message %q leaks the writer id", msg)
 	}
-	if strings.Contains(msg, "/tmp/x.jsonl") {
+	if strings.Contains(msg, "/data/data/com.termux/files/usr/tmp/x.jsonl") {
 		t.Fatalf("message %q leaks the session path", msg)
 	}
 }
 
 func TestSessionInUseMessageFallsBackWithoutInfo(t *testing.T) {
 	for name, err := range map[string]error{
-		"nil info":   &agent.SessionLeaseError{Path: "/tmp/x.jsonl"},
+		"nil info":   &agent.SessionLeaseError{Path: "/data/data/com.termux/files/usr/tmp/x.jsonl"},
 		"plain held": agent.ErrSessionLeaseHeld,
 		"zero pid":   &agent.SessionLeaseError{Info: &agent.SessionLeaseInfo{PID: 0}},
 	} {

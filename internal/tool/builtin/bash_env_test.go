@@ -61,7 +61,7 @@ func TestBashCommandEnvFiltersSensitiveKeysWhenEnabled(t *testing.T) {
 	t.Setenv("REASONIX_TEST_VISIBLE", "ok")
 	// PWD is the POSIX working-directory variable, not a password: the name
 	// filter must never strip it or every subprocess loses its cwd context.
-	t.Setenv("PWD", "/tmp/somewhere")
+	t.Setenv("PWD", "/data/data/com.termux/files/usr/tmp/somewhere")
 
 	env := strings.Join(bashCommandEnv(context.Background()), "\n")
 	if strings.Contains(env, "DEEPSEEK_API_KEY") || strings.Contains(env, "GH_TOKEN") {
@@ -70,7 +70,7 @@ func TestBashCommandEnvFiltersSensitiveKeysWhenEnabled(t *testing.T) {
 	if !strings.Contains(env, "REASONIX_TEST_VISIBLE=ok") {
 		t.Fatalf("bash env dropped non-sensitive key:\n%s", env)
 	}
-	if !strings.Contains(env, "PWD=/tmp/somewhere") {
+	if !strings.Contains(env, "PWD=/data/data/com.termux/files/usr/tmp/somewhere") {
 		t.Fatalf("bash env dropped PWD:\n%s", env)
 	}
 }

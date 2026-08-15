@@ -640,7 +640,7 @@ func TestApprovalOptionsFreshDynamicToolOnlyAllowOnceOrReject(t *testing.T) {
 }
 
 func TestDynamicBashApprovalOptionsUseExactSessionLiteral(t *testing.T) {
-	const command = "git status $(touch /tmp/reasonix-dynamic-approval)"
+	const command = "git status $(touch /data/data/com.termux/files/usr/tmp/reasonix-dynamic-approval)"
 	options := approvalOptions("bash", command, false)
 	if len(options) != 3 || options[1].Kind != OptAllowAlways {
 		t.Fatalf("dynamic Bash options = %+v, want ordinary options with session grant", options)

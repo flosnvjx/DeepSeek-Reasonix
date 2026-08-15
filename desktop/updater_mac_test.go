@@ -982,7 +982,7 @@ func TestMacUpdateHandoffParserRejectsFilesystemPaths(t *testing.T) {
 		"-to-version", "v2",
 		"-created-at", "2026-07-28T00:00:00Z",
 		"-transaction-id", strings.Repeat("a", 64),
-		"-old-app", "/tmp/Unrelated.app",
+		"-old-app", "/data/data/com.termux/files/usr/tmp/Unrelated.app",
 	})
 	if err == nil {
 		t.Fatal("legacy filesystem path argument was accepted")

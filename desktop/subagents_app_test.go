@@ -423,7 +423,7 @@ func TestTrySubagentRegistryBashEnforcesReadOnlyPolicy(t *testing.T) {
 	if !bash.ReadOnly() {
 		t.Fatal("try bash should report ReadOnly=true (restricted read-only wrapper)")
 	}
-	out, err := bash.Execute(context.Background(), json.RawMessage(`{"command":"rm -rf /tmp/x"}`))
+	out, err := bash.Execute(context.Background(), json.RawMessage(`{"command":"rm -rf /data/data/com.termux/files/usr/tmp/x"}`))
 	if err != nil {
 		t.Fatalf("blocked command should return a message, not an error: %v", err)
 	}

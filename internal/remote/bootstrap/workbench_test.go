@@ -156,8 +156,8 @@ func TestEnsureWorkbenchCLIRejectsRelativePATHBuild(t *testing.T) {
 }
 
 func TestWorkbenchProbeCommandQuotesManagedPath(t *testing.T) {
-	cmd := WorkbenchProbeCommand("/tmp/a b/'quoted'/reasonix")
-	if strings.Contains(cmd, "BIN=/tmp/a b") || !strings.Contains(cmd, `'\''`) {
+	cmd := WorkbenchProbeCommand("/data/data/com.termux/files/usr/tmp/a b/'quoted'/reasonix")
+	if strings.Contains(cmd, "BIN=/data/data/com.termux/files/usr/tmp/a b") || !strings.Contains(cmd, `'\''`) {
 		t.Fatalf("probe command is not safely quoted: %s", cmd)
 	}
 }

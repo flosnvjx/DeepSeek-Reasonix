@@ -28,11 +28,11 @@ func TestLinuxWriteDirsSkipsMissingDirs(t *testing.T) {
 }
 
 func TestBwrapExecutableMountArgsRevealsOnlyExactTemporaryExecutable(t *testing.T) {
-	got := bwrapExecutableMountArgs([]string{"/tmp/go-build123/b456/plugin.test", "-test.run=Helper"})
+	got := bwrapExecutableMountArgs([]string{"/data/data/com.termux/files/usr/tmp/go-build123/b456/plugin.test", "-test.run=Helper"})
 	want := []string{
-		"--dir", "/tmp/go-build123",
-		"--dir", "/tmp/go-build123/b456",
-		"--ro-bind", "/tmp/go-build123/b456/plugin.test", "/tmp/go-build123/b456/plugin.test",
+		"--dir", "/data/data/com.termux/files/usr/tmp/go-build123",
+		"--dir", "/data/data/com.termux/files/usr/tmp/go-build123/b456",
+		"--ro-bind", "/data/data/com.termux/files/usr/tmp/go-build123/b456/plugin.test", "/data/data/com.termux/files/usr/tmp/go-build123/b456/plugin.test",
 	}
 	if !reflect.DeepEqual(got, want) {
 		t.Fatalf("temporary executable mount args = %v, want %v", got, want)
@@ -49,9 +49,9 @@ func TestBwrapArgsForArgsMountsTemporaryExecutableAfterMasks(t *testing.T) {
 	secretDir := t.TempDir()
 	argv := bwrapArgsForArgs(Spec{
 		ForbidReadRoots: []string{secretDir},
-	}, []string{"/tmp/go-build123/b456/plugin.test", "-test.run=Helper"})
+	}, []string{"/data/data/com.termux/files/usr/tmp/go-build123/b456/plugin.test", "-test.run=Helper"})
 	mask := indexArgs(argv, "--tmpfs", secretDir)
-	mount := indexArgs(argv, "--ro-bind", "/tmp/go-build123/b456/plugin.test", "/tmp/go-build123/b456/plugin.test")
+	mount := indexArgs(argv, "--ro-bind", "/data/data/com.termux/files/usr/tmp/go-build123/b456/plugin.test", "/data/data/com.termux/files/usr/tmp/go-build123/b456/plugin.test")
 	if mask < 0 || mount < 0 || mount < mask {
 		t.Fatalf("temporary executable must be mounted after masks: %v", argv)
 	}

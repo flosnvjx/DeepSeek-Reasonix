@@ -125,7 +125,7 @@ func TestHighRiskClassifierKeepsOrdinaryAndMCPPermissionPathsSeparate(t *testing
 		{name: "git dot checkout", p: Proposal{Tool: "bash", Mutates: true, Args: json.RawMessage(`{"command":"git checkout ."}`)}, want: true},
 		{name: "git worktree restore", p: Proposal{Tool: "bash", Mutates: true, Args: json.RawMessage(`{"command":"git restore internal/a.go"}`)}, want: true},
 		{name: "git index restore", p: Proposal{Tool: "bash", Mutates: true, Args: json.RawMessage(`{"command":"git restore --staged internal/a.go"}`)}},
-		{name: "git hooks config", p: Proposal{Tool: "bash", Mutates: true, Args: json.RawMessage(`{"command":"git config core.hooksPath /tmp/hooks"}`)}, want: true},
+		{name: "git hooks config", p: Proposal{Tool: "bash", Mutates: true, Args: json.RawMessage(`{"command":"git config core.hooksPath /data/data/com.termux/files/usr/tmp/hooks"}`)}, want: true},
 		{name: "git config read", p: Proposal{Tool: "bash", Mutates: true, Args: json.RawMessage(`{"command":"git config --get core.hooksPath"}`)}},
 		{name: "git config unset", p: Proposal{Tool: "bash", Mutates: true, Args: json.RawMessage(`{"command":"git config --get core.hooksPath --unset core.hooksPath"}`)}, want: true},
 		{name: "dependency config edit", p: Proposal{Tool: "edit_file", Mutates: true, Args: json.RawMessage(`{"path":"go.mod"}`)}},

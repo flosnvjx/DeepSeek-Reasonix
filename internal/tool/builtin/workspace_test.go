@@ -105,7 +105,7 @@ func TestWorkspaceBashDir(t *testing.T) {
 	if err != nil {
 		t.Fatalf("bash: %v", err)
 	}
-	// macOS /tmp is a symlink to /private/tmp; compare on the resolved base name.
+	// macOS /data/data/com.termux/files/usr/tmp is a symlink to /private/data/data/com.termux/files/usr/tmp; compare on the resolved base name.
 	if !strings.Contains(out, filepath.Base(dir)) {
 		t.Errorf("bash cwd = %q, want to contain %q", strings.TrimSpace(out), filepath.Base(dir))
 	}

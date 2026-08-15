@@ -66,7 +66,7 @@ func seatbeltProfile(spec Spec) string {
 // writeAllowDirs is the deduplicated, symlink-resolved set of directories the
 // sandbox permits writes to: the caller's roots plus temp dirs, /dev, and the
 // common toolchain caches under $HOME. Symlinks are resolved because macOS's
-// /tmp and $TMPDIR live under /private, which is the path Seatbelt matches.
+// /data/data/com.termux/files/usr/tmp and $TMPDIR live under /private, which is the path Seatbelt matches.
 func writeAllowDirs(roots []string) []string {
 	return writeAllowDirsForSpec(Spec{WriteRoots: roots})
 }
@@ -76,7 +76,7 @@ func writeAllowDirsForSpec(spec Spec) []string {
 	dirs := append([]string{}, roots...)
 	dirs = append(dirs, "/dev")
 	if !spec.MinimalWrites {
-		dirs = append(dirs, "/tmp", "/private/tmp", "/private/var/folders", os.TempDir())
+		dirs = append(dirs, "/data/data/com.termux/files/usr/tmp", "/private/data/data/com.termux/files/usr/tmp", "/private/var/folders", os.TempDir())
 	}
 	if !spec.MinimalWrites {
 		if home, err := os.UserHomeDir(); err == nil {
@@ -116,7 +116,7 @@ func sbplString(s string) string {
 }
 
 // forbidReadDirs resolves forbid-read roots to absolute, symlink-free paths so
-// Seatbelt matches the canonical on-disk location (e.g. /private/tmp for /tmp).
+// Seatbelt matches the canonical on-disk location (e.g. /private/data/data/com.termux/files/usr/tmp for /data/data/com.termux/files/usr/tmp).
 func forbidReadDirs(roots []string) []string {
 	seen := map[string]bool{}
 	out := make([]string, 0, len(roots))

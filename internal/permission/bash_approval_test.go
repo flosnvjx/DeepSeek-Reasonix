@@ -14,10 +14,10 @@ func TestBashSubjectRequiresExplicitApproval(t *testing.T) {
 		{name: "safe null redirect", subject: "git status 2>/dev/null"},
 		{name: "simple sudo command", subject: "sudo chmod 644 file"},
 		{name: "non-indirect builtin", subject: "builtin printf '%s\\n' ok"},
-		{name: "command substitution", subject: "git status $(touch /tmp/x)", wantHuman: true, wantExact: true},
-		{name: "backtick substitution", subject: "git status `touch /tmp/x`", wantHuman: true, wantExact: true},
-		{name: "process substitution input", subject: "diff <(touch /tmp/x) expected", wantHuman: true, wantExact: true},
-		{name: "process substitution output", subject: "tee >(touch /tmp/x)", wantHuman: true, wantExact: true},
+		{name: "command substitution", subject: "git status $(touch /data/data/com.termux/files/usr/tmp/x)", wantHuman: true, wantExact: true},
+		{name: "backtick substitution", subject: "git status `touch /data/data/com.termux/files/usr/tmp/x`", wantHuman: true, wantExact: true},
+		{name: "process substitution input", subject: "diff <(touch /data/data/com.termux/files/usr/tmp/x) expected", wantHuman: true, wantExact: true},
+		{name: "process substitution output", subject: "tee >(touch /data/data/com.termux/files/usr/tmp/x)", wantHuman: true, wantExact: true},
 		{name: "parameter expansion", subject: "git diff $REV", wantExact: true},
 		{name: "arithmetic expansion", subject: "echo $((1 + 1))", wantExact: true},
 		{name: "brace expansion", subject: "printf '%s\\n' {a,b}", wantExact: true},
@@ -27,14 +27,14 @@ func TestBashSubjectRequiresExplicitApproval(t *testing.T) {
 		{name: "file redirect", subject: "git status > status.txt", wantExact: true},
 		{name: "unquoted glob", subject: "rm *.log", wantExact: true},
 		{name: "heredoc", subject: "cat <<EOF\nhello\nEOF", wantExact: true},
-		{name: "heredoc nested execution", subject: "cat <<EOF\n$(touch /tmp/x)\nEOF", wantHuman: true, wantExact: true},
-		{name: "eval", subject: `eval "touch /tmp/x"`, wantHuman: true, wantExact: true},
+		{name: "heredoc nested execution", subject: "cat <<EOF\n$(touch /data/data/com.termux/files/usr/tmp/x)\nEOF", wantHuman: true, wantExact: true},
+		{name: "eval", subject: `eval "touch /data/data/com.termux/files/usr/tmp/x"`, wantHuman: true, wantExact: true},
 		{name: "source", subject: "source ./script.sh", wantHuman: true, wantExact: true},
 		{name: "dot source", subject: ". ./script.sh", wantHuman: true, wantExact: true},
-		{name: "builtin eval", subject: `builtin eval "touch /tmp/x"`, wantHuman: true, wantExact: true},
+		{name: "builtin eval", subject: `builtin eval "touch /data/data/com.termux/files/usr/tmp/x"`, wantHuman: true, wantExact: true},
 		{name: "builtin source", subject: "builtin source ./script.sh", wantHuman: true, wantExact: true},
-		{name: "bash command string", subject: `bash -lc "touch /tmp/x"`, wantHuman: true, wantExact: true},
-		{name: "wrapped bash command string", subject: `env bash -c "touch /tmp/x"`, wantHuman: true, wantExact: true},
+		{name: "bash command string", subject: `bash -lc "touch /data/data/com.termux/files/usr/tmp/x"`, wantHuman: true, wantExact: true},
+		{name: "wrapped bash command string", subject: `env bash -c "touch /data/data/com.termux/files/usr/tmp/x"`, wantHuman: true, wantExact: true},
 		{name: "powershell command string", subject: `pwsh -Command "New-Item x"`, wantHuman: true, wantExact: true},
 		{name: "cmd command string", subject: `cmd /c "echo x > file"`, wantHuman: true, wantExact: true},
 		{name: "python inline code", subject: `python3 -c "open('x','w').close()"`, wantHuman: true, wantExact: true},
@@ -77,7 +77,7 @@ func TestPowerShellCmdletDenyPrefixIsCaseInsensitive(t *testing.T) {
 }
 
 func TestPolicyDynamicBashRequiresExplicitApproval(t *testing.T) {
-	const command = "git status $(touch /tmp/reasonix-permission-bypass)"
+	const command = "git status $(touch /data/data/com.termux/files/usr/tmp/reasonix-permission-bypass)"
 
 	tests := []struct {
 		name string
@@ -111,7 +111,7 @@ func TestPolicyDynamicBashRequiresExplicitApproval(t *testing.T) {
 }
 
 func TestPolicyRawBashPrefixMatchesDynamicSpacing(t *testing.T) {
-	command := "git  status $(touch /tmp/x)"
+	command := "git  status $(touch /data/data/com.termux/files/usr/tmp/x)"
 	if got := New("allow", nil, nil, []string{"Bash(git status:*)"}).DecideSubject("bash", false, command); got != Deny {
 		t.Fatalf("scoped deny with dynamic spacing = %v, want Deny", got)
 	}
@@ -120,14 +120,14 @@ func TestPolicyRawBashPrefixMatchesDynamicSpacing(t *testing.T) {
 func TestPolicyDynamicBashShapesRequireExplicitApproval(t *testing.T) {
 	p := New("allow", []string{"Bash"}, nil, nil)
 	for _, command := range []string{
-		"git status `touch /tmp/x`",
-		"diff <(touch /tmp/x) expected",
-		"tee >(touch /tmp/x)",
-		`eval "touch /tmp/x"`,
+		"git status `touch /data/data/com.termux/files/usr/tmp/x`",
+		"diff <(touch /data/data/com.termux/files/usr/tmp/x) expected",
+		"tee >(touch /data/data/com.termux/files/usr/tmp/x)",
+		`eval "touch /data/data/com.termux/files/usr/tmp/x"`,
 		"source ./script.sh",
-		`builtin eval "touch /tmp/x"`,
+		`builtin eval "touch /data/data/com.termux/files/usr/tmp/x"`,
 		"builtin source ./script.sh",
-		`bash -c "touch /tmp/x"`,
+		`bash -c "touch /data/data/com.termux/files/usr/tmp/x"`,
 		`python3 -c "open('x','w').close()"`,
 	} {
 		if got := p.DecideSubject("bash", true, command); got != Ask {
@@ -180,7 +180,7 @@ func TestPolicyStaticBashRulesRemainReusable(t *testing.T) {
 }
 
 func TestDynamicBashRuleMatchingAndCoverage(t *testing.T) {
-	const command = "git status $(touch /tmp/x)"
+	const command = "git status $(touch /data/data/com.termux/files/usr/tmp/x)"
 	if RuleMatchesString("Bash(git*)", "bash", command) {
 		t.Fatal("broad session allow matched dynamic command")
 	}
@@ -203,9 +203,9 @@ func TestDynamicBashRuleMatchingAndCoverage(t *testing.T) {
 
 func TestDynamicBashRememberedAsLiteral(t *testing.T) {
 	commands := []string{
-		"git status $(touch /tmp/x)",
+		"git status $(touch /data/data/com.termux/files/usr/tmp/x)",
 		"rm *.log",
-		`eval "touch /tmp/x"`,
+		`eval "touch /data/data/com.termux/files/usr/tmp/x"`,
 	}
 	for _, command := range commands {
 		want := "Bash=" + command

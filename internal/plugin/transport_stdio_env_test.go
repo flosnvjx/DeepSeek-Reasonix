@@ -55,7 +55,7 @@ func TestPrepareMCPPrivateStateWindowsPreservesHostTemp(t *testing.T) {
 
 func TestPrepareMCPPrivateStateUnixIsolatesTemp(t *testing.T) {
 	root := filepath.Join(t.TempDir(), "mcp-state", "matlab")
-	hostTemp := "/tmp/host"
+	hostTemp := "/data/data/com.termux/files/usr/tmp/host"
 	env := []string{"TMP=" + hostTemp, "TEMP=" + hostTemp, "TMPDIR=" + hostTemp}
 
 	_, got, err := prepareMCPPrivateStateForOS(Spec{StateDir: root}, sandbox.Spec{}, env, "linux")

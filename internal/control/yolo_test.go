@@ -103,7 +103,7 @@ func TestRequestApprovalHonorsAutoApproveTools(t *testing.T) {
 
 	done := make(chan bool, 1)
 	go func() {
-		allow, _, err := c.requestApproval(context.Background(), "multi_edit", "/tmp/file", nil)
+		allow, _, err := c.requestApproval(context.Background(), "multi_edit", "/data/data/com.termux/files/usr/tmp/file", nil)
 		if err != nil {
 			t.Errorf("requestApproval: %v", err)
 		}
@@ -271,7 +271,7 @@ func TestToolApprovalModeAutoDrainsPendingFallbackApproval(t *testing.T) {
 	done := make(chan bool, 1)
 	errs := make(chan error, 1)
 	go func() {
-		allow, _, err := c.requestApproval(context.Background(), "multi_edit", "/tmp/file", nil)
+		allow, _, err := c.requestApproval(context.Background(), "multi_edit", "/data/data/com.termux/files/usr/tmp/file", nil)
 		if err != nil {
 			errs <- err
 			return
@@ -429,7 +429,7 @@ func TestSetAutoApproveToolsAllowsPendingApproval(t *testing.T) {
 	done := make(chan bool, 1)
 	errs := make(chan error, 1)
 	go func() {
-		allow, _, err := c.requestApproval(context.Background(), "multi_edit", "/tmp/file", nil)
+		allow, _, err := c.requestApproval(context.Background(), "multi_edit", "/data/data/com.termux/files/usr/tmp/file", nil)
 		if err != nil {
 			errs <- err
 			return
@@ -701,7 +701,7 @@ func TestSetModeYoloDrainsPendingApproval(t *testing.T) {
 
 	done := make(chan bool, 1)
 	go func() {
-		allow, _, _ := c.requestApproval(context.Background(), "multi_edit", "/tmp/file", nil)
+		allow, _, _ := c.requestApproval(context.Background(), "multi_edit", "/data/data/com.termux/files/usr/tmp/file", nil)
 		done <- allow
 	}()
 

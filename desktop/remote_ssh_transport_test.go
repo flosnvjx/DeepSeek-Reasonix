@@ -400,12 +400,12 @@ func TestRemoteSSHTransportAskPassEnvironmentIsControlled(t *testing.T) {
 
 func TestRemoteSSHEnvironmentIsAllowlisted(t *testing.T) {
 	env := parseEnvironmentMap(sanitizeRemoteSSHEnvironment([]string{
-		"PATH=/usr/bin", "HOME=/home/dev", "SSH_AUTH_SOCK=/tmp/agent",
+		"PATH=/usr/bin", "HOME=/home/dev", "SSH_AUTH_SOCK=/data/data/com.termux/files/usr/tmp/agent",
 		"LC_ALL=C", "DEEPSEEK_API_KEY=must-not-cross", "OPENAI_API_KEY=must-not-cross",
 		"REASONIX_REMOTE_ASKPASS_KEY=must-not-cross", "UNRELATED_APP_STATE=value",
 	}))
 	for key, want := range map[string]string{
-		"PATH": "/usr/bin", "HOME": "/home/dev", "SSH_AUTH_SOCK": "/tmp/agent", "LC_ALL": "C",
+		"PATH": "/usr/bin", "HOME": "/home/dev", "SSH_AUTH_SOCK": "/data/data/com.termux/files/usr/tmp/agent", "LC_ALL": "C",
 	} {
 		if env[key] != want {
 			t.Fatalf("%s = %q, want %q", key, env[key], want)

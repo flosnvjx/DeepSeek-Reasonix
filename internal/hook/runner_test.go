@@ -24,7 +24,7 @@ func TestNewRunnerNil(t *testing.T) {
 }
 
 func TestNewRunnerEmpty(t *testing.T) {
-	r := NewRunner(nil, "/tmp", nil, nil)
+	r := NewRunner(nil, "/data/data/com.termux/files/usr/tmp", nil, nil)
 	if r.Enabled() {
 		t.Error("empty hooks Runner should not be enabled")
 	}
@@ -34,7 +34,7 @@ func TestNewRunnerWithHooks(t *testing.T) {
 	hooks := []ResolvedHook{
 		{HookConfig: HookConfig{Command: "echo hi"}, Event: PreToolUse, Scope: ScopeGlobal},
 	}
-	r := NewRunner(hooks, "/tmp", nil, nil)
+	r := NewRunner(hooks, "/data/data/com.termux/files/usr/tmp", nil, nil)
 	if !r.Enabled() {
 		t.Error("Runner with hooks should be enabled")
 	}
@@ -56,7 +56,7 @@ func TestToolMutationHooksEnabled(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			r := NewRunner([]ResolvedHook{{Event: tt.event}}, "/tmp", nil, nil)
+			r := NewRunner([]ResolvedHook{{Event: tt.event}}, "/data/data/com.termux/files/usr/tmp", nil, nil)
 			if got := r.ToolMutationHooksEnabled(); got != tt.want {
 				t.Fatalf("ToolMutationHooksEnabled() = %v, want %v", got, tt.want)
 			}
@@ -67,7 +67,7 @@ func TestToolMutationHooksEnabled(t *testing.T) {
 // --- Runner.PreToolUse ---
 
 func TestRunnerPreToolUseNoHooks(t *testing.T) {
-	r := NewRunner(nil, "/tmp", nil, nil)
+	r := NewRunner(nil, "/data/data/com.termux/files/usr/tmp", nil, nil)
 	block, msg := r.PreToolUse(context.Background(), "bash", nil)
 	if block || msg != "" {
 		t.Errorf("no hooks should pass: block=%v msg=%q", block, msg)
@@ -81,7 +81,7 @@ func TestRunnerPreToolUsePass(t *testing.T) {
 	spawner := func(_ context.Context, in SpawnInput) SpawnResult {
 		return SpawnResult{ExitCode: 0}
 	}
-	r := NewRunner(hooks, "/tmp", spawner, nil)
+	r := NewRunner(hooks, "/data/data/com.termux/files/usr/tmp", spawner, nil)
 	block, msg := r.PreToolUse(context.Background(), "bash", nil)
 	if block {
 		t.Errorf("exit 0 should not block: msg=%q", msg)
@@ -97,7 +97,7 @@ func TestRunnerPreToolUseBlock(t *testing.T) {
 	}
 	var notified string
 	notify := func(msg string) { notified = msg }
-	r := NewRunner(hooks, "/tmp", spawner, notify)
+	r := NewRunner(hooks, "/data/data/com.termux/files/usr/tmp", spawner, notify)
 	block, msg := r.PreToolUse(context.Background(), "bash", nil)
 	if !block {
 		t.Error("exit 2 on PreToolUse should block")
@@ -113,7 +113,7 @@ func TestRunnerPreToolUseBlock(t *testing.T) {
 // --- Runner.PostToolUse ---
 
 func TestRunnerPostToolUseNoHooks(t *testing.T) {
-	r := NewRunner(nil, "/tmp", nil, nil)
+	r := NewRunner(nil, "/data/data/com.termux/files/usr/tmp", nil, nil)
 	// Should not panic.
 	r.PostToolUse(context.Background(), "bash", nil, "ok")
 }
@@ -127,7 +127,7 @@ func TestRunnerPostToolUseWarn(t *testing.T) {
 	}
 	var notified string
 	notify := func(msg string) { notified = msg }
-	r := NewRunner(hooks, "/tmp", spawner, notify)
+	r := NewRunner(hooks, "/data/data/com.termux/files/usr/tmp", spawner, notify)
 	r.PostToolUse(context.Background(), "bash", nil, "result")
 	if notified == "" {
 		t.Error("PostToolUse warn should notify")
@@ -140,7 +140,7 @@ func TestRunnerPostToolUseFailurePreservesNativeObserver(t *testing.T) {
 		{HookConfig: HookConfig{Command: "native-post"}, Event: PostToolUse},
 	}
 	var commands []string
-	r := NewRunner(hooks, "/tmp", func(_ context.Context, in SpawnInput) SpawnResult {
+	r := NewRunner(hooks, "/data/data/com.termux/files/usr/tmp", func(_ context.Context, in SpawnInput) SpawnResult {
 		commands = append(commands, in.Command)
 		return SpawnResult{ExitCode: 0}
 	}, nil)
@@ -164,7 +164,7 @@ func TestRunnerPermissionRequestPayload(t *testing.T) {
 		return SpawnResult{ExitCode: 0}
 	}
 	args := json.RawMessage(`{"command":"go test ./..."}`)
-	r := NewRunner(hooks, "/tmp", spawner, nil)
+	r := NewRunner(hooks, "/data/data/com.termux/files/usr/tmp", spawner, nil)
 	r.PermissionRequest(context.Background(), "bash", "go test ./...", args)
 
 	if got.Event != PermissionRequest {
@@ -189,7 +189,7 @@ func TestRunnerPermissionRequestWarnOnly(t *testing.T) {
 		return SpawnResult{ExitCode: 2, Stderr: "notification failed"}
 	}
 	var notified string
-	r := NewRunner(hooks, "/tmp", spawner, func(msg string) { notified = msg })
+	r := NewRunner(hooks, "/data/data/com.termux/files/usr/tmp", spawner, func(msg string) { notified = msg })
 	decision, _ := r.PermissionRequest(context.Background(), "bash", "go test", nil)
 	if decision != nil {
 		t.Errorf("native PermissionRequest hook must stay advisory-only, got decision=%v", *decision)
@@ -206,20 +206,20 @@ func TestRunnerPermissionRequestClaudeDecisions(t *testing.T) {
 	}
 
 	denyJSON := `{"hookSpecificOutput":{"hookEventName":"PermissionRequest","decision":{"behavior":"deny"}}}`
-	r := NewRunner(claudeHooks, "/tmp", spawnerReturning(denyJSON), nil)
+	r := NewRunner(claudeHooks, "/data/data/com.termux/files/usr/tmp", spawnerReturning(denyJSON), nil)
 	decision, _ := r.PermissionRequest(context.Background(), "bash", "rm -rf /", nil)
 	if decision == nil || *decision != false {
 		t.Fatalf("Claude deny decision = %v, want false", decision)
 	}
 
 	allowJSON := `{"hookSpecificOutput":{"hookEventName":"PermissionRequest","decision":{"behavior":"allow"}}}`
-	r = NewRunner(claudeHooks, "/tmp", spawnerReturning(allowJSON), nil)
+	r = NewRunner(claudeHooks, "/data/data/com.termux/files/usr/tmp", spawnerReturning(allowJSON), nil)
 	decision, _ = r.PermissionRequest(context.Background(), "bash", "go test", nil)
 	if decision == nil || *decision != true {
 		t.Fatalf("Claude allow decision = %v, want true", decision)
 	}
 
-	r = NewRunner(claudeHooks, "/tmp", spawnerReturning(""), nil)
+	r = NewRunner(claudeHooks, "/data/data/com.termux/files/usr/tmp", spawnerReturning(""), nil)
 	decision, _ = r.PermissionRequest(context.Background(), "bash", "go test", nil)
 	if decision != nil {
 		t.Fatalf("no opinion from the hook should return a nil decision, got %v", *decision)
@@ -235,7 +235,7 @@ func TestRunnerPromptSubmitBlock(t *testing.T) {
 	spawner := func(_ context.Context, in SpawnInput) SpawnResult {
 		return SpawnResult{ExitCode: 2, Stderr: "not allowed"}
 	}
-	r := NewRunner(hooks, "/tmp", spawner, nil)
+	r := NewRunner(hooks, "/data/data/com.termux/files/usr/tmp", spawner, nil)
 	block, _ := r.PromptSubmit(context.Background(), "bad input", 1)
 	if !block {
 		t.Error("exit 2 on UserPromptSubmit should block")
@@ -245,7 +245,7 @@ func TestRunnerPromptSubmitBlock(t *testing.T) {
 // --- Runner.Stop ---
 
 func TestRunnerStopNoHooks(t *testing.T) {
-	r := NewRunner(nil, "/tmp", nil, nil)
+	r := NewRunner(nil, "/data/data/com.termux/files/usr/tmp", nil, nil)
 	// Should not panic.
 	r.Stop(context.Background(), "last answer", 1)
 }
@@ -257,7 +257,7 @@ func TestRunnerStopWithHooks(t *testing.T) {
 	spawner := func(_ context.Context, in SpawnInput) SpawnResult {
 		return SpawnResult{ExitCode: 0}
 	}
-	r := NewRunner(hooks, "/tmp", spawner, nil)
+	r := NewRunner(hooks, "/data/data/com.termux/files/usr/tmp", spawner, nil)
 	r.Stop(context.Background(), "done", 1)
 }
 
@@ -267,7 +267,7 @@ func TestRunnerStopResultPreservesNativeStopObserver(t *testing.T) {
 		{HookConfig: HookConfig{Command: "native-stop"}, Event: Stop},
 	}
 	var commands []string
-	r := NewRunner(hooks, "/tmp", func(_ context.Context, in SpawnInput) SpawnResult {
+	r := NewRunner(hooks, "/data/data/com.termux/files/usr/tmp", func(_ context.Context, in SpawnInput) SpawnResult {
 		commands = append(commands, in.Command)
 		return SpawnResult{ExitCode: 0}
 	}, nil)
@@ -292,7 +292,7 @@ func TestRunnerSessionStartReturnsAdditionalContexts(t *testing.T) {
 			return SpawnResult{ExitCode: 1, Stderr: "unexpected"}
 		}
 	}
-	r := NewRunner(hooks, "/tmp", spawner, nil)
+	r := NewRunner(hooks, "/data/data/com.termux/files/usr/tmp", spawner, nil)
 	got := r.SessionStart(context.Background())
 	if len(got) != 2 || got[0] != "Load notes." || got[1] != "Use Superpowers." {
 		t.Fatalf("SessionStart contexts = %#v", got)
@@ -330,7 +330,7 @@ func TestRunnerSessionStartWarnsOnInvalidJSON(t *testing.T) {
 		return SpawnResult{ExitCode: 0, Stdout: `{"hookSpecificOutput":`}
 	}
 	var notified string
-	r := NewRunner(hooks, "/tmp", spawner, func(msg string) { notified = msg })
+	r := NewRunner(hooks, "/data/data/com.termux/files/usr/tmp", spawner, func(msg string) { notified = msg })
 	if got := r.SessionStart(context.Background()); len(got) != 0 {
 		t.Fatalf("SessionStart contexts = %#v, want none", got)
 	}
@@ -383,11 +383,11 @@ func TestRunnerClaudeLifecyclePayloadsShareSessionID(t *testing.T) {
 // --- Runner.PostLLMCall ---
 
 func TestRunnerHasPostLLMCall(t *testing.T) {
-	with := NewRunner([]ResolvedHook{{HookConfig: HookConfig{Command: "x"}, Event: PostLLMCall}}, "/tmp", nil, nil)
+	with := NewRunner([]ResolvedHook{{HookConfig: HookConfig{Command: "x"}, Event: PostLLMCall}}, "/data/data/com.termux/files/usr/tmp", nil, nil)
 	if !with.HasPostLLMCall() {
 		t.Error("a configured PostLLMCall hook should report HasPostLLMCall")
 	}
-	without := NewRunner([]ResolvedHook{{HookConfig: HookConfig{Command: "x"}, Event: Stop}}, "/tmp", nil, nil)
+	without := NewRunner([]ResolvedHook{{HookConfig: HookConfig{Command: "x"}, Event: Stop}}, "/data/data/com.termux/files/usr/tmp", nil, nil)
 	if without.HasPostLLMCall() {
 		t.Error("only a Stop hook should not report HasPostLLMCall")
 	}
@@ -401,7 +401,7 @@ func TestRunnerPostLLMCallReplacesReasoning(t *testing.T) {
 	spawner := func(_ context.Context, in SpawnInput) SpawnResult {
 		return SpawnResult{ExitCode: 0, Stdout: "  译文  "}
 	}
-	r := NewRunner(hooks, "/tmp", spawner, nil)
+	r := NewRunner(hooks, "/data/data/com.termux/files/usr/tmp", spawner, nil)
 	if got := r.PostLLMCall(context.Background(), "raw reasoning", 2); got != "译文" {
 		t.Fatalf("PostLLMCall = %q, want trimmed hook stdout", got)
 	}
@@ -419,7 +419,7 @@ func TestRunnerPostLLMCallKeepsOriginal(t *testing.T) {
 	}
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
-			r := NewRunner(tc.hooks, "/tmp", func(context.Context, SpawnInput) SpawnResult { return tc.spawn }, nil)
+			r := NewRunner(tc.hooks, "/data/data/com.termux/files/usr/tmp", func(context.Context, SpawnInput) SpawnResult { return tc.spawn }, nil)
 			if got := r.PostLLMCall(context.Background(), "raw", 1); got != "raw" {
 				t.Fatalf("PostLLMCall = %q, want original reasoning preserved", got)
 			}
@@ -479,7 +479,7 @@ func TestPayloadJSON(t *testing.T) {
 	args := json.RawMessage(`{"command":"echo hi"}`)
 	p := Payload{
 		Event:    PreToolUse,
-		Cwd:      "/tmp",
+		Cwd:      "/data/data/com.termux/files/usr/tmp",
 		ToolName: "bash",
 		ToolArgs: args,
 		Turn:     1,

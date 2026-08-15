@@ -948,7 +948,7 @@ func TestPreviewSessionMessagesIncludesProcessEvents(t *testing.T) {
 		`{"kind":"phase","text":"Preparing context"}`,
 		`{"kind":"notice","level":"warn","text":"Network changed"}`,
 		`{"kind":"compaction_started","compaction":{"trigger":"manual"}}`,
-		`{"kind":"compaction_done","compaction":{"trigger":"manual","messages":6,"summary":"Kept the current task.","archive":"/tmp/archive.jsonl"}}`,
+		`{"kind":"compaction_done","compaction":{"trigger":"manual","messages":6,"summary":"Kept the current task.","archive":"/data/data/com.termux/files/usr/tmp/archive.jsonl"}}`,
 		`{"type":"user.message","text":"hello","ts":1718000000000}`,
 		`{"type":"model.final","content":"hi","reasoningContent":"thinking"}`,
 	}, "\n") + "\n"
@@ -972,7 +972,7 @@ func TestPreviewSessionMessagesIncludesProcessEvents(t *testing.T) {
 	if got[2].Role != "compaction" || !got[2].Pending || got[2].Trigger != "manual" {
 		t.Fatalf("pending compaction event not preserved: %+v", got[2])
 	}
-	if got[3].Role != "compaction" || got[3].Pending || got[3].Messages != 6 || got[3].Summary != "Kept the current task." || got[3].Archive != "/tmp/archive.jsonl" {
+	if got[3].Role != "compaction" || got[3].Pending || got[3].Messages != 6 || got[3].Summary != "Kept the current task." || got[3].Archive != "/data/data/com.termux/files/usr/tmp/archive.jsonl" {
 		t.Fatalf("finished compaction event not preserved: %+v", got[3])
 	}
 	if got[4].Role != "user" || got[5].Reasoning != "thinking" {

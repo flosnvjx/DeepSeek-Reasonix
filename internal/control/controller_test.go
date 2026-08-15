@@ -1961,14 +1961,14 @@ func TestNewSessionStartsFreshContextAndSavesTranscript(t *testing.T) {
 
 func TestSnapshotConflictLogAttrsCarryRevisionLedger(t *testing.T) {
 	conflict := &agent.SessionSnapshotConflictError{
-		Path:             "/tmp/session.jsonl",
+		Path:             "/data/data/com.termux/files/usr/tmp/session.jsonl",
 		Kind:             agent.SessionSnapshotConflictDiverged,
 		ExistingMessages: 7,
 		SnapshotMessages: 5,
 		BaseRevision:     3,
 		DiskRevision:     9,
 	}
-	attrs := snapshotConflictLogAttrs(fmt.Errorf("save: %w", conflict), "/tmp/session.jsonl", "rewrite")
+	attrs := snapshotConflictLogAttrs(fmt.Errorf("save: %w", conflict), "/data/data/com.termux/files/usr/tmp/session.jsonl", "rewrite")
 	got := map[string]any{}
 	for i := 0; i+1 < len(attrs); i += 2 {
 		key, ok := attrs[i].(string)
@@ -1988,7 +1988,7 @@ func TestSnapshotConflictLogAttrsCarryRevisionLedger(t *testing.T) {
 	}
 
 	// A conflict error without the typed detail still logs path and mode.
-	plain := snapshotConflictLogAttrs(agent.ErrSessionSnapshotConflict, "/tmp/session.jsonl", "snapshot")
+	plain := snapshotConflictLogAttrs(agent.ErrSessionSnapshotConflict, "/data/data/com.termux/files/usr/tmp/session.jsonl", "snapshot")
 	if len(plain) != 4 {
 		t.Fatalf("plain attrs = %v, want only path and mode", plain)
 	}
@@ -3305,7 +3305,7 @@ func permissionHookController(t *testing.T, match string) (*Controller, chan str
 			HookConfig: hook.HookConfig{Command: "notify", Match: match},
 			Event:      hook.PermissionRequest,
 			Scope:      hook.ScopeGlobal,
-		}}, "/tmp", spawner, nil),
+		}}, "/data/data/com.termux/files/usr/tmp", spawner, nil),
 	})
 	return c, ids, payloads
 }
@@ -3330,7 +3330,7 @@ func claudePermissionHookController(t *testing.T, exitCode int, stdout string) (
 			HookConfig: hook.HookConfig{Command: "guard", Match: "Bash", PayloadFormat: "claude"},
 			Event:      hook.PermissionRequest,
 			Scope:      hook.ScopeGlobal,
-		}}, "/tmp", spawner, nil),
+		}}, "/data/data/com.termux/files/usr/tmp", spawner, nil),
 	})
 	return c, ids
 }
@@ -3387,7 +3387,7 @@ func wildcardClaudePermissionHookController(t *testing.T, exitCode int, stdout s
 			HookConfig: hook.HookConfig{Command: "guard", PayloadFormat: "claude"},
 			Event:      hook.PermissionRequest,
 			Scope:      hook.ScopeGlobal,
-		}}, "/tmp", spawner, nil),
+		}}, "/data/data/com.termux/files/usr/tmp", spawner, nil),
 	})
 	return c, ids
 }
@@ -4292,7 +4292,7 @@ func TestApprovalSessionGrantKeepsPolicyDenyPrecedence(t *testing.T) {
 	if err != nil || !allow {
 		t.Fatalf("same-command call after session grant = (%v,%v), want allow", allow, err)
 	}
-	allow, reason, err := g.Check(context.Background(), "bash", json.RawMessage(`{"command":"rm -rf /tmp/x"}`), false)
+	allow, reason, err := g.Check(context.Background(), "bash", json.RawMessage(`{"command":"rm -rf /data/data/com.termux/files/usr/tmp/x"}`), false)
 	if err != nil || allow || reason == "" {
 		t.Fatalf("deny-listed call = (%v,%q,%v), want blocked with reason", allow, reason, err)
 	}
@@ -4672,7 +4672,7 @@ func TestApprovedPlanAutoApproveEndsWithExecutionTurn(t *testing.T) {
 	if got := c.Compose("继续"); StripComposePrefixes(got) != "继续" {
 		t.Fatalf("a paused approved plan must not marker-prefix the next turn, got %q", got)
 	}
-	allow, _, err := gateApprover{c}.Approve(context.Background(), "write_file", "/tmp/a", nil)
+	allow, _, err := gateApprover{c}.Approve(context.Background(), "write_file", "/data/data/com.termux/files/usr/tmp/a", nil)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -4722,7 +4722,7 @@ func TestApprovedPlanDoesNotAutoApproveNonContinuationTurn(t *testing.T) {
 		t.Fatalf("non-continuation input should not be marker-prefixed, got %q", got)
 	}
 
-	allow, _, err := gateApprover{c}.Approve(context.Background(), "write_file", "/tmp/a", nil)
+	allow, _, err := gateApprover{c}.Approve(context.Background(), "write_file", "/data/data/com.termux/files/usr/tmp/a", nil)
 	if err != nil {
 		t.Fatal(err)
 	}

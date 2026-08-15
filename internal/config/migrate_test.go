@@ -40,7 +40,7 @@ func TestMigrateImportsKeyPluginsAndLang(t *testing.T) {
 			"fs": {"command": "npx", "args": ["-y", "server-fs"], "type": "stdio"},
 			"stripe": {"type": "http", "url": "https://mcp.stripe.com", "disabled": true}
 		},
-		"mcpEnv": {"fs": {"ROOT": "/tmp"}}
+		"mcpEnv": {"fs": {"ROOT": "/data/data/com.termux/files/usr/tmp"}}
 	}`)
 
 	res, err := MigrateLegacyIfNeeded()
@@ -154,7 +154,7 @@ func TestMigrateImportsLegacyMCPStringList(t *testing.T) {
 			"off=npx -y server-off"
 		],
 		"mcpServers": {"fs": {"command": "npx", "args": ["-y", "server-fs"]}},
-		"mcpEnv": {"memory": {"MEMORY_PATH": "/tmp/mem"}},
+		"mcpEnv": {"memory": {"MEMORY_PATH": "/data/data/com.termux/files/usr/tmp/mem"}},
 		"mcpDisabled": ["off"]
 	}`)
 
@@ -173,7 +173,7 @@ func TestMigrateImportsLegacyMCPStringList(t *testing.T) {
 	if mem.Command != "npx" || len(mem.Args) != 2 || mem.Args[1] != "@modelcontextprotocol/server-memory" {
 		t.Errorf("memory spec not parsed: %+v", mem)
 	}
-	if mem.Env["MEMORY_PATH"] != "/tmp/mem" {
+	if mem.Env["MEMORY_PATH"] != "/data/data/com.termux/files/usr/tmp/mem" {
 		t.Errorf("mcpEnv not applied to memory: %+v", mem.Env)
 	}
 	if s := byName["search"]; s.Type != "sse" || s.URL != "https://mcp.example.com/sse" {

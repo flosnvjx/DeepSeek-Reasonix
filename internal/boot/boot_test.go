@@ -3907,7 +3907,7 @@ func TestRememberDynamicBashLiteralIsNotCoveredByBroadRule(t *testing.T) {
 allow = ["Bash(git*)"]
 `)
 
-	const literal = "Bash=git status $(touch /tmp/reasonix-dynamic-approval)"
+	const literal = "Bash=git status $(touch /data/data/com.termux/files/usr/tmp/reasonix-dynamic-approval)"
 	res := rememberPermissionRule(workspace, literal)
 	if !res.Saved || res.CoveredBy != "" || res.Err != nil {
 		t.Fatalf("remember dynamic literal = %+v, want newly saved rule", res)

@@ -321,9 +321,9 @@ func TestToWireInteractionAndLifecyclePayloads(t *testing.T) {
 		{
 			name: "compaction",
 			in: event.Event{Kind: event.CompactionDone, Compaction: event.Compaction{
-				Trigger: "manual", Messages: 7, Summary: "brief", Archive: "/tmp/archive.jsonl",
+				Trigger: "manual", Messages: 7, Summary: "brief", Archive: "/data/data/com.termux/files/usr/tmp/archive.jsonl",
 			}},
-			want: []string{`"kind":"compaction_done"`, `"trigger":"manual"`, `"messages":7`, `"summary":"brief"`, `"archive":"/tmp/archive.jsonl"`},
+			want: []string{`"kind":"compaction_done"`, `"trigger":"manual"`, `"messages":7`, `"summary":"brief"`, `"archive":"/data/data/com.termux/files/usr/tmp/archive.jsonl"`},
 		},
 		{
 			name: "turn done error",

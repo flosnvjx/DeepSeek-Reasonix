@@ -431,7 +431,7 @@ func TestRenderMCPStatusGroupsAndCompactsResources(t *testing.T) {
 func TestRenderMCPStatusCapsLongSections(t *testing.T) {
 	var resources []plugin.Resource
 	for i := 0; i < mcpMaxItemsPerSection+2; i++ {
-		resources = append(resources, plugin.Resource{Server: "fs", URI: "file:///tmp/resource.md"})
+		resources = append(resources, plugin.Resource{Server: "fs", URI: "file:///data/data/com.termux/files/usr/tmp/resource.md"})
 	}
 	got := renderMCPStatus(80,
 		[]plugin.ServerStatus{{Name: "fs", Transport: "stdio"}},
@@ -738,7 +738,7 @@ func TestMCPEditConfigLaunchUsesVisualBeforeEditor(t *testing.T) {
 	t.Setenv("VISUAL", "vim")
 	t.Setenv("EDITOR", "nano")
 
-	path := "/tmp/reasonix config.toml"
+	path := "/data/data/com.termux/files/usr/tmp/reasonix config.toml"
 	launch, err := mcpEditConfigLaunchCommand(path, func(string) (string, error) {
 		t.Fatal("lookPath should not be called when VISUAL is set")
 		return "", errors.New("unexpected lookup")
@@ -767,7 +767,7 @@ func TestMCPEditConfigLaunchEditorWithArgs(t *testing.T) {
 	t.Setenv("VISUAL", "code --wait")
 	t.Setenv("EDITOR", "")
 
-	path := "/tmp/reasonix.toml"
+	path := "/data/data/com.termux/files/usr/tmp/reasonix.toml"
 	launch, err := mcpEditConfigLaunchCommand(path, func(string) (string, error) {
 		t.Fatal("lookPath should not be called when VISUAL is set")
 		return "", errors.New("unexpected lookup")
@@ -790,7 +790,7 @@ func TestMCPEditConfigLaunchEditorWithArgs(t *testing.T) {
 }
 
 func TestMCPEditConfigLaunchEditorParsesShellStyleQuotes(t *testing.T) {
-	path := "/tmp/reasonix.toml"
+	path := "/data/data/com.termux/files/usr/tmp/reasonix.toml"
 	cases := []struct {
 		name       string
 		editor     string
@@ -853,7 +853,7 @@ func TestMCPEditConfigLaunchEditorRejectsUnterminatedQuote(t *testing.T) {
 	t.Setenv("VISUAL", `code --wait "unterminated`)
 	t.Setenv("EDITOR", "")
 
-	_, err := mcpEditConfigLaunchCommand("/tmp/reasonix.toml", func(string) (string, error) {
+	_, err := mcpEditConfigLaunchCommand("/data/data/com.termux/files/usr/tmp/reasonix.toml", func(string) (string, error) {
 		t.Fatal("lookPath should not be called when VISUAL is set")
 		return "", errors.New("unexpected lookup")
 	})
@@ -867,9 +867,9 @@ func TestMCPEditConfigLaunchEditorRejectsUnterminatedQuote(t *testing.T) {
 // sh -lc construction would have run "rm" here.
 func TestMCPEditConfigLaunchEditorRejectsShellMetachars(t *testing.T) {
 	t.Setenv("VISUAL", "")
-	t.Setenv("EDITOR", "vim; rm -rf /tmp/should-not-exist")
+	t.Setenv("EDITOR", "vim; rm -rf /data/data/com.termux/files/usr/tmp/should-not-exist")
 
-	path := "/tmp/reasonix.toml"
+	path := "/data/data/com.termux/files/usr/tmp/reasonix.toml"
 	_, err := mcpEditConfigLaunchCommand(path, func(string) (string, error) {
 		t.Fatal("lookPath should not be called when EDITOR is set")
 		return "", errors.New("unexpected lookup")
@@ -889,7 +889,7 @@ func TestMCPEditConfigLaunchEditorExpandsEnvVar(t *testing.T) {
 	t.Setenv("VISUAL", "$REASONIX_TEST_EDITOR_BIN --flag")
 	t.Setenv("EDITOR", "")
 
-	path := "/tmp/reasonix.toml"
+	path := "/data/data/com.termux/files/usr/tmp/reasonix.toml"
 	launch, err := mcpEditConfigLaunchCommand(path, func(string) (string, error) {
 		t.Fatal("lookPath should not be called when VISUAL is set")
 		return "", errors.New("unexpected lookup")
@@ -927,7 +927,7 @@ func TestMCPEditConfigLaunchEditorExpandsTilde(t *testing.T) {
 		t.Run(c.name, func(t *testing.T) {
 			t.Setenv("VISUAL", c.editor+" --wait")
 			t.Setenv("EDITOR", "")
-			launch, err := mcpEditConfigLaunchCommand("/tmp/reasonix.toml", func(string) (string, error) {
+			launch, err := mcpEditConfigLaunchCommand("/data/data/com.termux/files/usr/tmp/reasonix.toml", func(string) (string, error) {
 				t.Fatal("lookPath should not be called when VISUAL is set")
 				return "", errors.New("unexpected lookup")
 			})
@@ -951,7 +951,7 @@ func TestMCPEditConfigLaunchEditorTildeNotInPayload(t *testing.T) {
 	t.Setenv("VISUAL", "")
 	t.Setenv("EDITOR", "vim; rm -rf ~/should-not-exist")
 
-	_, err := mcpEditConfigLaunchCommand("/tmp/reasonix.toml", func(string) (string, error) {
+	_, err := mcpEditConfigLaunchCommand("/data/data/com.termux/files/usr/tmp/reasonix.toml", func(string) (string, error) {
 		t.Fatal("lookPath should not be called when EDITOR is set")
 		return "", errors.New("unexpected lookup")
 	})
@@ -964,7 +964,7 @@ func TestMCPEditConfigLaunchFallsBackToTerminalEditor(t *testing.T) {
 	t.Setenv("VISUAL", "")
 	t.Setenv("EDITOR", "")
 
-	launch, err := mcpEditConfigLaunchCommand("/tmp/reasonix.toml", func(name string) (string, error) {
+	launch, err := mcpEditConfigLaunchCommand("/data/data/com.termux/files/usr/tmp/reasonix.toml", func(name string) (string, error) {
 		if name == "vim" {
 			return "/usr/bin/vim", nil
 		}
@@ -979,7 +979,7 @@ func TestMCPEditConfigLaunchFallsBackToTerminalEditor(t *testing.T) {
 	if launch.editor != "vim" {
 		t.Fatalf("editor = %q, want vim", launch.editor)
 	}
-	if len(launch.cmd.Args) != 2 || launch.cmd.Args[0] != "/usr/bin/vim" || launch.cmd.Args[1] != "/tmp/reasonix.toml" {
+	if len(launch.cmd.Args) != 2 || launch.cmd.Args[0] != "/usr/bin/vim" || launch.cmd.Args[1] != "/data/data/com.termux/files/usr/tmp/reasonix.toml" {
 		t.Fatalf("terminal editor args=%v", launch.cmd.Args)
 	}
 }
@@ -988,7 +988,7 @@ func TestMCPEditConfigLaunchUsesSystemDefaultLast(t *testing.T) {
 	t.Setenv("VISUAL", "")
 	t.Setenv("EDITOR", "")
 
-	path := "/tmp/reasonix.toml"
+	path := "/data/data/com.termux/files/usr/tmp/reasonix.toml"
 	launch, err := mcpEditConfigLaunchCommand(path, func(string) (string, error) {
 		return "", errors.New("not found")
 	})

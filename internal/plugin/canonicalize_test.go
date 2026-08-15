@@ -123,7 +123,7 @@ func TestNormalizeNameAvoidsSanitizedCollisions(t *testing.T) {
 }
 
 func TestSummarizeFailureErrorSingleLine(t *testing.T) {
-	got := summarizeFailureError(errors.New("npm error code ENOTEMPTY\nnpm error path /tmp/x"))
+	got := summarizeFailureError(errors.New("npm error code ENOTEMPTY\nnpm error path /data/data/com.termux/files/usr/tmp/x"))
 	if strings.Contains(got, "\n") || !strings.Contains(got, "ENOTEMPTY") {
 		t.Fatalf("summary = %q", got)
 	}

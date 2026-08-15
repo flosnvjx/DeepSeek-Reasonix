@@ -14,7 +14,7 @@ func TestCompactionCardLines(t *testing.T) {
 		Trigger:  "auto",
 		Messages: 12,
 		Summary:  "## Goal\n- do X\n## Files & code\n- a.go edited",
-		Archive:  "/tmp/arch/20260531.jsonl",
+		Archive:  "/data/data/com.termux/files/usr/tmp/arch/20260531.jsonl",
 	})
 
 	joined := strings.Join(lines, "\n")
@@ -27,7 +27,7 @@ func TestCompactionCardLines(t *testing.T) {
 		}
 	}
 	// Every summary line (and the archive line) sits under the "│" gutter.
-	for _, want := range []string{"│ ## Goal", "│ - do X", "│ - a.go edited", "│ archived /tmp/arch/20260531.jsonl"} {
+	for _, want := range []string{"│ ## Goal", "│ - do X", "│ - a.go edited", "│ archived /data/data/com.termux/files/usr/tmp/arch/20260531.jsonl"} {
 		if !strings.Contains(joined, want) {
 			t.Errorf("card missing gutter line %q in:\n%s", want, joined)
 		}

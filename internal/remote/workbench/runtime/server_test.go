@@ -110,7 +110,7 @@ func testRuntimeSocket(t *testing.T) string {
 	}
 	tempBase := os.TempDir()
 	if goruntime.GOOS == "darwin" {
-		tempBase = "/tmp"
+		tempBase = "/data/data/com.termux/files/usr/tmp"
 	}
 	shortDir, err := os.MkdirTemp(tempBase, "rx-wb-")
 	if err != nil {

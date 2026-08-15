@@ -43,7 +43,7 @@ func TestSlashArgItems(t *testing.T) {
 		CurrentProvider: "deepseek-flash",
 		PluginNames:     []string{"superpowers", "workflow-kit"},
 		MemoryRefs:      []string{"mem-cache", "cache-first"},
-		MemoryArchives:  []string{"/tmp/memory archive/cache-first.md"},
+		MemoryArchives:  []string{"/data/data/com.termux/files/usr/tmp/memory archive/cache-first.md"},
 	}
 
 	// /skills subcommands
@@ -201,7 +201,7 @@ func TestSlashArgItems(t *testing.T) {
 		t.Errorf("/memory revisions should offer active memory refs; got %v", labelsOf(items))
 	}
 	items, _ = SlashArgItems("/memory recover ", data)
-	if !has(items, "/tmp/memory archive/cache-first.md") {
+	if !has(items, "/data/data/com.termux/files/usr/tmp/memory archive/cache-first.md") {
 		t.Errorf("/memory recover should offer archive paths; got %v", labelsOf(items))
 	}
 }

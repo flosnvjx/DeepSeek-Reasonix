@@ -15,7 +15,7 @@ func TestSbplString(t *testing.T) {
 		input string
 		want  string
 	}{
-		{"/tmp", `"/tmp"`},
+		{"/data/data/com.termux/files/usr/tmp", `"/data/data/com.termux/files/usr/tmp"`},
 		{`/path/with"quote`, `"/path/with\"quote"`},
 		{`/path/with\backslash`, `"/path/with\\backslash"`},
 		{`/both"and\`, `"/both\"and\\"`},
@@ -32,7 +32,7 @@ func TestSbplString(t *testing.T) {
 // --- writeAllowDirs ---
 
 func TestWriteAllowDirsDeduplication(t *testing.T) {
-	dirs := writeAllowDirs([]string{"/tmp", "/tmp", "/tmp"})
+	dirs := writeAllowDirs([]string{"/data/data/com.termux/files/usr/tmp", "/data/data/com.termux/files/usr/tmp", "/data/data/com.termux/files/usr/tmp"})
 	seen := map[string]bool{}
 	for _, d := range dirs {
 		if seen[d] {
@@ -84,7 +84,7 @@ func TestWriteAllowDirsSkipsEmpty(t *testing.T) {
 }
 
 func TestWriteAllowDirsNoDuplicates(t *testing.T) {
-	roots := []string{"/tmp", "/private/tmp", os.TempDir()}
+	roots := []string{"/data/data/com.termux/files/usr/tmp", "/private/data/data/com.termux/files/usr/tmp", os.TempDir()}
 	dirs := writeAllowDirs(roots)
 	seen := map[string]bool{}
 	for _, d := range dirs {
@@ -145,7 +145,7 @@ func TestMinimalWriteProfileOnlyAddsExplicitRootsAndDev(t *testing.T) {
 	if !containsDarwinPath(dirs, root) || !containsDarwinPath(dirs, "/dev") {
 		t.Fatalf("minimal write dirs = %v", dirs)
 	}
-	for _, forbidden := range []string{"/tmp", "/private/tmp", filepath.Join(os.Getenv("HOME"), ".npm"), filepath.Join(os.Getenv("HOME"), ".cache")} {
+	for _, forbidden := range []string{"/data/data/com.termux/files/usr/tmp", "/private/data/data/com.termux/files/usr/tmp", filepath.Join(os.Getenv("HOME"), ".npm"), filepath.Join(os.Getenv("HOME"), ".cache")} {
 		if forbidden != "" && containsDarwinPath(dirs, forbidden) {
 			t.Fatalf("minimal MCP profile unexpectedly allowed broad write root %q: %v", forbidden, dirs)
 		}
@@ -204,7 +204,7 @@ func TestProfileNetworkAndRoots(t *testing.T) {
 // TestSandboxEnforcesWrites runs real commands through sandbox-exec and checks
 // the boundary: a write under a write-root succeeds, a write elsewhere under
 // $HOME (not a root, not a cache dir) is refused, and reads are unrestricted.
-// Dirs are created under $HOME (not /tmp, which the profile always allows) so
+// Dirs are created under $HOME (not /data/data/com.termux/files/usr/tmp, which the profile always allows) so
 // the test exercises the root mechanism itself.
 func TestSandboxEnforcesWrites(t *testing.T) {
 	if !Available() {

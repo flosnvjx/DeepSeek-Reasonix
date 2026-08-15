@@ -1223,7 +1223,7 @@ func TestPluginRootFromCloneRejectsEscapes(t *testing.T) {
 	if err != nil || got != wantSafeRoot {
 		t.Fatalf("safe plugin root = %q, %v; want %q", got, err, wantSafeRoot)
 	}
-	for _, repoPath := range []string{"../evil", "/tmp/evil", `plugins\\..\\evil`} {
+	for _, repoPath := range []string{"../evil", "/data/data/com.termux/files/usr/tmp/evil", `plugins\\..\\evil`} {
 		if root, err := pluginRootFromClone(cloneRoot, repoPath); err == nil {
 			t.Fatalf("pluginRootFromClone(%q) = %q, nil; want escape rejection", repoPath, root)
 		}
@@ -1636,7 +1636,7 @@ func TestPlanIDMismatchRefusesApply(t *testing.T) {
 func TestPlanIDIncludesActionDetails(t *testing.T) {
 	req := request{
 		Op:     "install",
-		Source: "/tmp/example/.mcp.json",
+		Source: "/data/data/com.termux/files/usr/tmp/example/.mcp.json",
 		Kind:   "mcp",
 		Scope:  "project",
 		Mode:   "auto",
@@ -1844,8 +1844,8 @@ func TestEagerTierEscalatesRisk(t *testing.T) {
 // well-formed call.
 func ExampleNewTool() {
 	tl := NewTool(Options{
-		ProjectRoot: "/tmp/example",
-		HomeDir:     "/tmp/example-home",
+		ProjectRoot: "/data/data/com.termux/files/usr/tmp/example",
+		HomeDir:     "/data/data/com.termux/files/usr/tmp/example-home",
 	})
 	raw, _ := json.Marshal(map[string]any{"source": "https://example.com/mcp"})
 	out, _ := tl.Execute(context.Background(), raw)

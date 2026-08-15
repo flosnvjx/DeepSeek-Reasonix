@@ -238,18 +238,18 @@ func TestParseRemoteConnectSyntaxFlagOrder(t *testing.T) {
 	}{
 		{
 			name:     "name then flags (documented / GUIDE order)",
-			args:     []string{"gpu-box", "--open", "--workspace", "/tmp/ws", "--local-port", "8080"},
+			args:     []string{"gpu-box", "--open", "--workspace", "/data/data/com.termux/files/usr/tmp/ws", "--local-port", "8080"},
 			wantName: "gpu-box",
 			wantOpen: true,
-			wantWS:   "/tmp/ws",
+			wantWS:   "/data/data/com.termux/files/usr/tmp/ws",
 			wantPort: 8080,
 		},
 		{
 			name:     "flags then name",
-			args:     []string{"--open", "--workspace", "/tmp/ws", "gpu-box"},
+			args:     []string{"--open", "--workspace", "/data/data/com.termux/files/usr/tmp/ws", "gpu-box"},
 			wantName: "gpu-box",
 			wantOpen: true,
-			wantWS:   "/tmp/ws",
+			wantWS:   "/data/data/com.termux/files/usr/tmp/ws",
 		},
 		{
 			name:     "single-dash open before name",

@@ -77,7 +77,7 @@ func TestFindLinuxDesktopEntryMatchesNormalizedAliasesThenSubstrings(t *testing.
 }
 
 func TestLinuxExternalOpenerCommandPerTerminalArguments(t *testing.T) {
-	const workdir = "/tmp/reasonix workspace"
+	const workdir = "/data/data/com.termux/files/usr/tmp/reasonix workspace"
 	cases := []struct {
 		mode   string
 		target string
@@ -116,17 +116,17 @@ func TestLinuxExternalOpenerCommandLaunchesDesktopEntriesViaGio(t *testing.T) {
 	t.Setenv("PATH", binDir)
 
 	spec := externalOpenerSpec{Target: "/usr/share/applications/code.desktop", LaunchMode: "gio"}
-	cmd, err := linuxExternalOpenerCommand(spec, "/tmp/project")
+	cmd, err := linuxExternalOpenerCommand(spec, "/data/data/com.termux/files/usr/tmp/project")
 	if err != nil {
 		t.Fatalf("linuxExternalOpenerCommand error = %v", err)
 	}
-	want := []string{gio, "launch", "/usr/share/applications/code.desktop", "/tmp/project"}
+	want := []string{gio, "launch", "/usr/share/applications/code.desktop", "/data/data/com.termux/files/usr/tmp/project"}
 	if !reflect.DeepEqual(cmd.Args, want) {
 		t.Fatalf("gio args = %#v, want %#v", cmd.Args, want)
 	}
 
 	t.Setenv("PATH", t.TempDir())
-	if _, err := linuxExternalOpenerCommand(spec, "/tmp/project"); !errors.Is(err, os.ErrNotExist) {
+	if _, err := linuxExternalOpenerCommand(spec, "/data/data/com.termux/files/usr/tmp/project"); !errors.Is(err, os.ErrNotExist) {
 		t.Fatalf("missing gio error = %v, want os.ErrNotExist", err)
 	}
 }

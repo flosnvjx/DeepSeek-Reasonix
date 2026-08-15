@@ -1044,7 +1044,7 @@ func TestBashToolCallMixesMutationAndVerification(t *testing.T) {
 	}{
 		{
 			name:    "temporary JavaScript extraction",
-			command: `python3 -c 'open("/tmp/snake_check.js","w").write("x")' && node --check /tmp/snake_check.js`,
+			command: `python3 -c 'open("/data/data/com.termux/files/usr/tmp/snake_check.js","w").write("x")' && node --check /data/data/com.termux/files/usr/tmp/snake_check.js`,
 			want:    true,
 		},
 		{name: "generated code before tests", command: "go generate ./... && go test ./...", want: true},

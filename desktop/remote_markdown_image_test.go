@@ -354,7 +354,7 @@ func TestRemoteMarkdownImageRoundTripperPinsDirectDialAndResolvesRouteOnce(t *te
 func TestRemoteMarkdownImageRejectsUnsafeTargets(t *testing.T) {
 	for _, raw := range []string{
 		"",
-		"file:///tmp/secret.png",
+		"file:///data/data/com.termux/files/usr/tmp/secret.png",
 		"http://localhost/image.png",
 		"http://127.0.0.1/image.png",
 		"http://10.0.0.1/image.png",

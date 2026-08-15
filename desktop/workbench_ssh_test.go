@@ -38,7 +38,7 @@ func TestRemoteWorkbenchBinaryValidation(t *testing.T) {
 	if err != nil || got == "" {
 		t.Fatalf("valid path = %q err=%v", got, err)
 	}
-	for _, value := range []string{"relative/reasonix", "/tmp/../bin/reasonix", "/tmp/x\n/evil"} {
+	for _, value := range []string{"relative/reasonix", "/data/data/com.termux/files/usr/tmp/../bin/reasonix", "/data/data/com.termux/files/usr/tmp/x\n/evil"} {
 		if _, err := validateRemoteWorkbenchBinary(value); err == nil {
 			t.Fatalf("unsafe path %q accepted", value)
 		}

@@ -668,7 +668,7 @@ func TestRunInjectsSessionStartHookContextOnce(t *testing.T) {
 		HookConfig: hook.HookConfig{Command: "session-start"},
 		Event:      hook.SessionStart,
 		Scope:      hook.ScopeGlobal,
-	}}, "/tmp", func(context.Context, hook.SpawnInput) hook.SpawnResult {
+	}}, "/data/data/com.termux/files/usr/tmp", func(context.Context, hook.SpawnInput) hook.SpawnResult {
 		return hook.SpawnResult{ExitCode: 0, Stdout: `{"hookSpecificOutput":{"hookEventName":"SessionStart","additionalContext":"Load workspace conventions."}}`}
 	}, nil)
 	c := New(Options{Runner: runner, Hooks: hooks})

@@ -262,13 +262,13 @@ func TestFilterEnvDropsSensitiveKeys(t *testing.T) {
 		"DEEPSEEK_API_KEY=sk-real-secret-value-123456",
 		"GH_TOKEN=ghp_abcdefghijklmnopqrstuvwxyz",
 		"PWD=/home/user/project",
-		"HOME=/tmp/home",
+		"HOME=/data/data/com.termux/files/usr/tmp/home",
 	})
 	joined := strings.Join(got, "\n")
 	if strings.Contains(joined, "DEEPSEEK_API_KEY") || strings.Contains(joined, "GH_TOKEN") {
 		t.Fatalf("sensitive env survived:\n%s", joined)
 	}
-	for _, want := range []string{"PATH=/usr/bin", "HOME=/tmp/home", "PWD=/home/user/project"} {
+	for _, want := range []string{"PATH=/usr/bin", "HOME=/data/data/com.termux/files/usr/tmp/home", "PWD=/home/user/project"} {
 		if !strings.Contains(joined, want) {
 			t.Fatalf("non-sensitive env %q dropped:\n%s", want, joined)
 		}

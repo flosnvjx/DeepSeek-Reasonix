@@ -188,13 +188,13 @@ func TestRememberRuleForBashUsesPrefixWhenAvailable(t *testing.T) {
 	if RuleMatchesString(got, "bash", "go testing ./...") {
 		t.Errorf("prefix rule should not match partial command words")
 	}
-	if RuleMatchesString(got, "bash", "go test ./... && rm -rf /tmp/x") {
+	if RuleMatchesString(got, "bash", "go test ./... && rm -rf /data/data/com.termux/files/usr/tmp/x") {
 		t.Errorf("prefix rule should not match commands with shell syntax")
 	}
 	if !RuleMatchesString("Bash(go test *)", "bash", "go test ./legacy") {
 		t.Errorf("legacy space-star prefix should still match similar commands")
 	}
-	if RuleMatchesString("Bash(go test *)", "bash", "go test ./legacy && rm -rf /tmp/x") {
+	if RuleMatchesString("Bash(go test *)", "bash", "go test ./legacy && rm -rf /data/data/com.termux/files/usr/tmp/x") {
 		t.Errorf("legacy space-star prefix should not match commands with shell syntax")
 	}
 	if !RuleMatchesString("Bash(go test:*)", "bash", `go "test" ./legacy`) {
@@ -230,9 +230,9 @@ func TestBashPrefixRulesMatchSafeRedirectsOnly(t *testing.T) {
 		"git log >$nullish",
 		"git log >nul.txt",
 		"git log 2>&1rm",
-		"git log >/dev/null && rm -rf /tmp/x",
-		"git log 2>&1 && rm -rf /tmp/x",
-		"git log >/dev/null\nrm -rf /tmp/x",
+		"git log >/dev/null && rm -rf /data/data/com.termux/files/usr/tmp/x",
+		"git log 2>&1 && rm -rf /data/data/com.termux/files/usr/tmp/x",
+		"git log >/dev/null\nrm -rf /data/data/com.termux/files/usr/tmp/x",
 	}
 	for _, cmd := range unsafe {
 		if RuleMatchesString("Bash(git log:*)", "bash", cmd) {
@@ -315,10 +315,10 @@ func TestSessionGrantRuleForBashUsesPrefix(t *testing.T) {
 }
 
 func TestBashCommandPrefixRejectsShellSyntax(t *testing.T) {
-	if got := BashCommandPrefix("go test ./... && rm -rf /tmp/x"); got != "" {
+	if got := BashCommandPrefix("go test ./... && rm -rf /data/data/com.termux/files/usr/tmp/x"); got != "" {
 		t.Errorf("BashCommandPrefix with shell syntax = %q, want empty", got)
 	}
-	if got := BashCommandPrefix("rm -rf /tmp/x"); got != "" {
+	if got := BashCommandPrefix("rm -rf /data/data/com.termux/files/usr/tmp/x"); got != "" {
 		t.Errorf("BashCommandPrefix dangerous command = %q, want empty", got)
 	}
 	if got := BashCommandPrefix("go test ./..."); got != "go test:*" {

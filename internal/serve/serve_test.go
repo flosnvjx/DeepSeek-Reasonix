@@ -182,7 +182,7 @@ func TestHistoryMessagesPreserveToolDetails(t *testing.T) {
 		{Role: provider.RoleAssistant, Content: "checking", ReasoningContent: "think", ToolCalls: []provider.ToolCall{{
 			ID: "call_1", Name: "bash", Arguments: `{"command":"pwd"}`,
 		}}},
-		{Role: provider.RoleTool, Name: "bash", ToolCallID: "call_1", Content: "/tmp/project\n"},
+		{Role: provider.RoleTool, Name: "bash", ToolCallID: "call_1", Content: "/data/data/com.termux/files/usr/tmp/project\n"},
 	})
 
 	if len(got) != 3 {
@@ -194,7 +194,7 @@ func TestHistoryMessagesPreserveToolDetails(t *testing.T) {
 	if len(got[1].ToolCalls) != 1 || got[1].ToolCalls[0].ID != "call_1" || got[1].ToolCalls[0].Name != "bash" || got[1].ToolCalls[0].Arguments != `{"command":"pwd"}` {
 		t.Fatalf("assistant tool calls not preserved: %+v", got[1].ToolCalls)
 	}
-	if got[2].ToolCallID != "call_1" || got[2].ToolName != "bash" || got[2].Content != "/tmp/project\n" {
+	if got[2].ToolCallID != "call_1" || got[2].ToolName != "bash" || got[2].Content != "/data/data/com.termux/files/usr/tmp/project\n" {
 		t.Fatalf("tool result details not preserved: %+v", got[2])
 	}
 }

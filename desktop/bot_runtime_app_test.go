@@ -69,21 +69,21 @@ func TestDesktopBotChannelsWithLegacyQQConfig(t *testing.T) {
 	channels, connectionChannels := desktopBotChannelsWithLegacyQQ(config.QQBotConfig{
 		Model:            "qq-model",
 		ToolApprovalMode: "auto",
-		WorkspaceRoot:    "/tmp/qq-project",
+		WorkspaceRoot:    "/data/data/com.termux/files/usr/tmp/qq-project",
 	}, nil, nil)
 
 	channel, ok := channels[bot.PlatformQQ]
 	if !ok {
 		t.Fatalf("platform QQ channel missing: %+v", channels)
 	}
-	if channel.Model != "qq-model" || channel.ToolApprovalMode != "auto" || channel.WorkspaceRoot != "/tmp/qq-project" {
+	if channel.Model != "qq-model" || channel.ToolApprovalMode != "auto" || channel.WorkspaceRoot != "/data/data/com.termux/files/usr/tmp/qq-project" {
 		t.Fatalf("platform channel = %+v, want QQ-specific runtime fields", channel)
 	}
 	connectionChannel, ok := connectionChannels["qq"]
 	if !ok {
 		t.Fatalf("connection QQ channel missing: %+v", connectionChannels)
 	}
-	if connectionChannel.Model != "qq-model" || connectionChannel.ToolApprovalMode != "auto" || connectionChannel.WorkspaceRoot != "/tmp/qq-project" {
+	if connectionChannel.Model != "qq-model" || connectionChannel.ToolApprovalMode != "auto" || connectionChannel.WorkspaceRoot != "/data/data/com.termux/files/usr/tmp/qq-project" {
 		t.Fatalf("connection channel = %+v, want QQ-specific runtime fields", connectionChannel)
 	}
 }

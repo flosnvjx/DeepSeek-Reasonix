@@ -52,11 +52,11 @@ func TestRemoteWorkbenchLiveDesktopBroker(t *testing.T) {
 	}
 
 	// Keep the Unix socket path below the macOS sockaddr_un length limit.
-	hostHome, err := os.MkdirTemp("/tmp", "rx-live-host-")
+	hostHome, err := os.MkdirTemp("/data/data/com.termux/files/usr/tmp", "rx-live-host-")
 	if err != nil {
 		t.Fatal(err)
 	}
-	workspace, err := os.MkdirTemp("/tmp", "rx-live-work-")
+	workspace, err := os.MkdirTemp("/data/data/com.termux/files/usr/tmp", "rx-live-work-")
 	if err != nil {
 		_ = os.RemoveAll(hostHome)
 		t.Fatal(err)

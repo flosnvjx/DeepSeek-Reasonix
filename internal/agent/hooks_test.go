@@ -13,14 +13,14 @@ import (
 )
 
 func TestToolHooksMayMutateWorkspaceUsesRunnerCapabilities(t *testing.T) {
-	if toolHooksMayMutateWorkspace(hook.NewRunner(nil, "/tmp", nil, nil)) {
+	if toolHooksMayMutateWorkspace(hook.NewRunner(nil, "/data/data/com.termux/files/usr/tmp", nil, nil)) {
 		t.Fatal("empty hook runner must not create a checkpoint coverage gap")
 	}
-	sessionOnly := hook.NewRunner([]hook.ResolvedHook{{Event: hook.SessionStart}}, "/tmp", nil, nil)
+	sessionOnly := hook.NewRunner([]hook.ResolvedHook{{Event: hook.SessionStart}}, "/data/data/com.termux/files/usr/tmp", nil, nil)
 	if toolHooksMayMutateWorkspace(sessionOnly) {
 		t.Fatal("non-tool hooks must not create a tool mutation coverage gap")
 	}
-	preTool := hook.NewRunner([]hook.ResolvedHook{{Event: hook.PreToolUse}}, "/tmp", nil, nil)
+	preTool := hook.NewRunner([]hook.ResolvedHook{{Event: hook.PreToolUse}}, "/data/data/com.termux/files/usr/tmp", nil, nil)
 	if !toolHooksMayMutateWorkspace(preTool) {
 		t.Fatal("PreToolUse shell hook must preserve the conservative coverage gap")
 	}

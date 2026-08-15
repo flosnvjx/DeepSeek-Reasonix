@@ -83,7 +83,7 @@ func TestLaunchCommandQuotesHostilePaths(t *testing.T) {
 		PidFile:   "/home/dev/.reasonix/remote/serve-x.pid",
 		LogFile:   "/home/dev/.reasonix/remote/serve-x.log",
 	}
-	hostile := "/tmp/'; rm -rf ~; echo '"
+	hostile := "/data/data/com.termux/files/usr/tmp/'; rm -rf ~; echo '"
 	cmd := LaunchCommand("/usr/bin/reasonix", hostile, paths)
 
 	// The hostile workspace must appear only inside a quoted operand, escaped.
@@ -91,7 +91,7 @@ func TestLaunchCommandQuotesHostilePaths(t *testing.T) {
 		t.Fatalf("hostile workspace not properly escaped:\n%s", cmd)
 	}
 	// No unescaped `rm -rf` sequence that would execute.
-	if strings.Contains(cmd, "cd /tmp/'; rm -rf") {
+	if strings.Contains(cmd, "cd /data/data/com.termux/files/usr/tmp/'; rm -rf") {
 		t.Fatalf("workspace broke out of quoting:\n%s", cmd)
 	}
 	// Sanity: the essential flags are present.

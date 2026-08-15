@@ -146,7 +146,7 @@ func TestSingleSurfaceTabsFileKeepsActiveEntry(t *testing.T) {
 	f := desktopTabsFile{
 		Tabs: []desktopTabEntry{
 			{ID: "a", Scope: "global", TopicID: "topic-a"},
-			{ID: "b", Scope: "project", WorkspaceRoot: "/tmp/project", TopicID: "topic-b"},
+			{ID: "b", Scope: "project", WorkspaceRoot: "/data/data/com.termux/files/usr/tmp/project", TopicID: "topic-b"},
 			{ID: "c", Scope: "global", TopicID: "topic-c"},
 		},
 		ActiveTab: "b",

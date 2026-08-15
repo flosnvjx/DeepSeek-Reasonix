@@ -38,8 +38,8 @@ func TestDecomposeBashCommand(t *testing.T) {
 		},
 		{
 			name: "semicolon",
-			in:   "cd /tmp; ls -la",
-			want: []string{"cd /tmp", "ls -la"},
+			in:   "cd /data/data/com.termux/files/usr/tmp; ls -la",
+			want: []string{"cd /data/data/com.termux/files/usr/tmp", "ls -la"},
 		},
 		{
 			name: "mixed compound",
@@ -102,8 +102,8 @@ func TestDecomposeBashCommand(t *testing.T) {
 		},
 		{
 			name: "newline splits",
-			in:   "cd /tmp\nls",
-			want: []string{"cd /tmp", "ls"},
+			in:   "cd /data/data/com.termux/files/usr/tmp\nls",
+			want: []string{"cd /data/data/com.termux/files/usr/tmp", "ls"},
 		},
 		{
 			name: "heredoc bails to nil (known out-of-scope)",
@@ -190,7 +190,7 @@ func TestPolicyDecideCompoundBash(t *testing.T) {
 		},
 		{
 			name:    "deny in any segment wins",
-			subject: `git add . && rm -rf /tmp/scratch`,
+			subject: `git add . && rm -rf /data/data/com.termux/files/usr/tmp/scratch`,
 			want:    Deny,
 		},
 		{
@@ -335,7 +335,7 @@ func TestPolicyDecideDynamicCompoundPreservesSegmentDenyAndAsk(t *testing.T) {
 		},
 		{
 			name:    "indirect execution segment deny beats required human ask",
-			subject: `git status && eval "touch /tmp/x"`,
+			subject: `git status && eval "touch /data/data/com.termux/files/usr/tmp/x"`,
 			deny:    []string{"Bash(eval *)"},
 			want:    Deny,
 		},

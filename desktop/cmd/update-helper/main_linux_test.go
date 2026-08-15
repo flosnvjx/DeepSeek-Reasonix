@@ -119,14 +119,14 @@ func TestAcceptVersionTransition(t *testing.T) {
 }
 
 func TestAptInstallArgvFixed(t *testing.T) {
-	argv := aptInstallArgv("/tmp/pkg.deb", false)
+	argv := aptInstallArgv("/data/data/com.termux/files/usr/tmp/pkg.deb", false)
 	want := []string{
 		"/usr/bin/apt-get",
 		"install",
 		"--assume-yes",
 		"--only-upgrade",
 		"--no-remove",
-		"/tmp/pkg.deb",
+		"/data/data/com.termux/files/usr/tmp/pkg.deb",
 	}
 	if len(argv) != len(want) {
 		t.Fatalf("argv = %v", argv)
@@ -143,11 +143,11 @@ func TestAptInstallArgvFixed(t *testing.T) {
 		}
 	}
 
-	downgradeArgv := aptInstallArgv("/tmp/pkg.deb", true)
+	downgradeArgv := aptInstallArgv("/data/data/com.termux/files/usr/tmp/pkg.deb", true)
 	if strings.Count(strings.Join(downgradeArgv, " "), "--allow-downgrades") != 1 {
 		t.Fatalf("constrained downgrade argv = %v", downgradeArgv)
 	}
-	if downgradeArgv[len(downgradeArgv)-1] != "/tmp/pkg.deb" {
+	if downgradeArgv[len(downgradeArgv)-1] != "/data/data/com.termux/files/usr/tmp/pkg.deb" {
 		t.Fatalf("package path must remain the final fixed argument: %v", downgradeArgv)
 	}
 }

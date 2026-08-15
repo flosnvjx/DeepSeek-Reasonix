@@ -805,7 +805,7 @@ func TestExpandPluginRootSupportsClaudeReasonixAndCmdAliases(t *testing.T) {
 }
 
 func TestExpandPluginRootDoesNotReprocessResolvedRoot(t *testing.T) {
-	root := `/tmp/$REASONIX_PLUGIN_ROOT/%CLAUDE_PLUGIN_ROOT%/${CLAUDE_PLUGIN_ROOT}`
+	root := `/data/data/com.termux/files/usr/tmp/$REASONIX_PLUGIN_ROOT/%CLAUDE_PLUGIN_ROOT%/${CLAUDE_PLUGIN_ROOT}`
 	value := `${CLAUDE_PLUGIN_ROOT}|$REASONIX_PLUGIN_ROOT|%CLAUDE_PLUGIN_ROOT%`
 	want := root + "|" + root + "|" + root
 	if got := expandPluginRoot(value, root); got != want {
@@ -1565,7 +1565,7 @@ func TestRunFiltersByEventAndTool(t *testing.T) {
 func TestRunClaudePayloadAndDirectArgs(t *testing.T) {
 	hooks := []ResolvedHook{{
 		HookConfig: HookConfig{
-			Command:       "/tmp/agent-critter",
+			Command:       "/data/data/com.termux/files/usr/tmp/agent-critter",
 			Argv:          []string{"--hook"},
 			ExecutionMode: ExecutionExec,
 			PayloadFormat: "claude",
@@ -1578,7 +1578,7 @@ func TestRunClaudePayloadAndDirectArgs(t *testing.T) {
 		ToolName: "bash", ToolArgs: json.RawMessage(`{"command":"false"}`),
 		ToolResult: "remote: denied", Error: "exit 1",
 	}, hooks, func(_ context.Context, in SpawnInput) SpawnResult { input = in; return SpawnResult{ExitCode: 0} })
-	if input.Command != "/tmp/agent-critter" || input.Mode != ExecutionExec || len(input.Args) != 1 || input.Args[0] != "--hook" {
+	if input.Command != "/data/data/com.termux/files/usr/tmp/agent-critter" || input.Mode != ExecutionExec || len(input.Args) != 1 || input.Args[0] != "--hook" {
 		t.Fatalf("direct hook input = %+v", input)
 	}
 	var payload map[string]any
