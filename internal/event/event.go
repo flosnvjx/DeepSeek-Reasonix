@@ -257,7 +257,7 @@ type Compaction struct {
 type GuardianResult struct {
 	ID                string            // unique review id
 	Tool              string            // tool being reviewed (e.g. "bash")
-	Subject           string            // call subject (e.g. "rm -rf /tmp/build")
+	Subject           string            // call subject (e.g. "rm -rf /data/data/com.termux/files/usr/tmp/build")
 	Outcome           string            // "allow" | "deny"
 	RiskLevel         string            // "low" | "medium" | "high" | "critical"
 	UserAuthorization string            // "unknown" | "low" | "medium" | "high"

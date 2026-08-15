@@ -477,7 +477,7 @@ func RenderTOMLForScope(c *Config, scope RenderScope) string {
 	if len(c.Sandbox.AllowWrite) > 0 {
 		fmt.Fprintf(&b, "allow_write = %s\n", renderStringArray(c.Sandbox.AllowWrite))
 	} else {
-		b.WriteString("# allow_write = [\"/tmp\"]          # extra dirs writers may also modify\n")
+		b.WriteString("# allow_write = [\"/data/data/com.termux/files/usr/tmp\"]          # extra dirs writers may also modify\n")
 	}
 	if len(c.Sandbox.ForbidRead) > 0 {
 		fmt.Fprintf(&b, "forbid_read = %s\n", renderStringArray(c.Sandbox.ForbidRead))

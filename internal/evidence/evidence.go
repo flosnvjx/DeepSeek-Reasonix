@@ -1506,7 +1506,7 @@ func ToolCallRequiresDeliveryCriteria(toolName string, args json.RawMessage, rea
 // a host-recognized verifier with another segment the host cannot prove is
 // read-only. Delivery mode blocks this shape before execution. Besides avoiding
 // accidental workspace changes during a check, this keeps scratch-file setup
-// (for example, writing /tmp/check.js before node --check) from becoming the
+// (for example, writing /data/data/com.termux/files/usr/tmp/check.js before node --check) from becoming the
 // latest opaque mutation and invalidating otherwise valid delivery evidence.
 func BashToolCallMixesMutationAndVerification(args json.RawMessage) bool {
 	var fields map[string]json.RawMessage

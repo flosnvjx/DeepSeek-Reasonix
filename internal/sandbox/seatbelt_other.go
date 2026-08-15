@@ -85,7 +85,7 @@ func bwrapArgs(spec Spec, sh Shell, command string) []string {
 		"--ro-bind", "/", "/",
 		"--dev", "/dev",
 		"--proc", "/proc",
-		"--tmpfs", "/tmp",
+		"--tmpfs", "/data/data/com.termux/files/usr/tmp",
 	}
 	if spec.Network {
 		// Re-allow network by removing the network namespace.
@@ -112,7 +112,7 @@ func bwrapArgsForArgs(spec Spec, args []string) []string {
 		"--ro-bind", "/", "/",
 		"--dev", "/dev",
 		"--proc", "/proc",
-		"--tmpfs", "/tmp",
+		"--tmpfs", "/data/data/com.termux/files/usr/tmp",
 	}
 	if spec.Network {
 		// Re-allow network by removing the network namespace.
@@ -127,9 +127,9 @@ func bwrapArgsForArgs(spec Spec, args []string) []string {
 		}
 	}
 	out = append(out, bwrapForbidReadArgs(spec.ForbidReadRoots)...)
-	// /tmp is intentionally replaced with an empty filesystem above so MCP
+	// /data/data/com.termux/files/usr/tmp is intentionally replaced with an empty filesystem above so MCP
 	// servers cannot inspect unrelated host temporary files. A configured
-	// executable may itself live below /tmp, though (for example a downloaded
+	// executable may itself live below /data/data/com.termux/files/usr/tmp, though (for example a downloaded
 	// one-shot launcher or a Go test helper). Re-expose only that exact file,
 	// read-only, after every masking mount so the process can start without
 	// revealing its siblings.
@@ -194,7 +194,7 @@ func bwrapExecutableMountArgs(args []string) []string {
 		return nil
 	}
 	destination := filepath.Clean(args[0])
-	if !filepath.IsAbs(destination) || !pathWithin(destination, "/tmp") {
+	if !filepath.IsAbs(destination) || !pathWithin(destination, "/data/data/com.termux/files/usr/tmp") {
 		return nil
 	}
 	source := destination
@@ -203,12 +203,12 @@ func bwrapExecutableMountArgs(args []string) []string {
 	}
 
 	parent := filepath.Dir(destination)
-	rel, err := filepath.Rel("/tmp", parent)
+	rel, err := filepath.Rel("/data/data/com.termux/files/usr/tmp", parent)
 	if err != nil {
 		return nil
 	}
 	out := make([]string, 0, 2*strings.Count(rel, string(filepath.Separator))+4)
-	current := "/tmp"
+	current := "/data/data/com.termux/files/usr/tmp"
 	for _, part := range strings.Split(rel, string(filepath.Separator)) {
 		if part == "" || part == "." {
 			continue
@@ -226,7 +226,7 @@ func pathWithin(path, root string) bool {
 
 func linuxWriteDirs() []string {
 	dirs := []string{}
-	if td := os.TempDir(); td != "" && td != "/tmp" {
+	if td := os.TempDir(); td != "" && td != "/data/data/com.termux/files/usr/tmp" {
 		dirs = append(dirs, td)
 	}
 	if home, err := os.UserHomeDir(); err == nil {
@@ -244,7 +244,7 @@ func linuxWriteDirs() []string {
 		if real, err := filepath.EvalSymlinks(abs); err == nil {
 			abs = real
 		}
-		if abs == "/tmp" || seen[abs] || !dirExists(abs) {
+		if abs == "/data/data/com.termux/files/usr/tmp" || seen[abs] || !dirExists(abs) {
 			continue
 		}
 		seen[abs] = true
